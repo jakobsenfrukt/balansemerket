@@ -1,0 +1,21 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:900|Work+Sans:500,700,900&display=swap');
+
+$font-body: 'work sans', helvetica, arial, sans-serif;
+$font-heading: 'montserrat', helvetica, arial, sans-serif;
+
+$color-white: rgb(255, 255, 255);
+$color-black: rgb(0, 0, 0);
+$color-main: rgb(255, 0, 0);
+
+$color-background: $color-white;
+$color-text: $color-black;
+
+$width-xs: 21rem;
+$width-s: 32rem;
+$width-m: 42rem;
+$width-l: 56rem;
+
+$media-s: 700px;
+$media-m: 1200px;
+$media-l: 1600px;
+$media-xl: 1900px;

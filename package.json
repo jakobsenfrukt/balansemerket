@@ -1,0 +1,27 @@
+{
+  "name": "balansemerket",
+  "version": "1.0.0",
+  "description": "website for balansemerket",
+  "author": "elisejakob",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "@nuxtjs/apollo": "^4.0.0-rc6",
+    "@nuxtjs/proxy": "^1.3.3",
+    "apollo-link": "^1.2.12",
+    "apollo-link-context": "^1.0.18",
+    "apollo-link-http": "^1.5.15",
+    "graphql-tag": "^2.10.1",
+    "nuxt": "^2.4.0"
+  },
+  "devDependencies": {
+    "node-sass": "^4.12.0",
+    "nodemon": "^1.18.9",
+    "sass-loader": "^7.1.0"
+  }
+}
