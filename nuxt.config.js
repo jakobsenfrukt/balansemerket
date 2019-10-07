@@ -53,15 +53,7 @@ export default {
       },
     },
     clientConfigs: {
-      default: {
-        httpEndpoint: ('http://localhost:3000/craft/api'),
-        wsEndpoint: null,
-        httpLinkOptions: {
-          headers: {
-            'Authorization': 'Bearer DLxomPNNuYLVfh8RXClON9NJwTo0VJpP2kYRzq24qVEmBZwaXsWGxmTJw_gRWST9'
-          }
-        }
-      }
+      default: '~/apollo.config.js'
     }
   },
 

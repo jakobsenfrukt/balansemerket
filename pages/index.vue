@@ -5,10 +5,12 @@
       :lead="hjem.ingress"
     />
     <img class="main-illustration" src="/images/ansvar.jpg" />
-    <p>Med utgangspunkt i Likestillings- og diskrimineringsombudets (LDO) anbefalinger, vil vi trekke frem seks tiltak mot seksuell trakassering, tilpasset til kulturlivet.</p>
-    <p>Å forebygge seksuell trakassering er ikke gjort en gang for alle, men krever et kontinuerlig arbeid. På denne siden vil vi stadig oppdatere og videreutvikle våre tiltak, ressurser og verktøy mot seksuell trakassering i kulturlivet.</p>
-    <p>Disse anbefalingene kan benyttes i midlertidige prosjekter, produksjoner eller i tradisjonelle arbeidsplasser.</p>
-    <p>Kulturfeltet er mangfoldig, bestående av både små, store og kjempestore institusjoner og aktører fordelt over eksempelvis scenekunst-, film- og tv-, musikk- og billedkunstfeltet. Ulike aktører kan ha vidt forskjellige utfordringer og behov. Kulturaktører som gjennomgår ordningen vil delta i veiledningsmøter hvor vi forsøker å imøtegå den enkelte virksomhets utfordringer og behov.</p>
+    <div v-for="(block, index) in hjem.innhold" :key="index">
+      <div v-if="block.tekst" v-html="block.tekst.content"></div>
+      <div v-if="block.bilde">
+        <img :src="block.bilde.fullWidth" />
+      </div>
+    </div>
     <TiltakArrows />
   </main>
 </template>
@@ -43,6 +45,20 @@ export default {
         ... on Hjem {
           overskrift
           ingress
+          innhold {
+            ... on InnholdTekst {
+              __typename
+              tekst {
+                content
+              }
+            }
+            ... on InnholdBilde {
+              __typename
+              bilde {
+                fullWidth: url(transform: fullWidth)
+              }
+            }
+          }
         }
       }
     }`
