@@ -1,24 +1,23 @@
 <template>
   <main class="site-main">
     <Intro
-      :title="hjem.overskrift"
-      :lead="hjem.ingress"
+      :title="om.overskrift"
+      :lead="om.ingress"
     />
-    <img v-if="hjem.toppbilde.length" class="main-illustration" :src="hjem.toppbilde[0].fullWidth" />
-    <div v-for="(block, index) in hjem.innhold" :key="index">
-      <div v-if="block.__typename === 'InnholdTekst'" class="text">
+    <img v-if="om.toppbilde.length" class="main-illustration" :src="om.toppbilde[0].fullWidth" />
+    <div v-for="(block, index) in tiltak.innhold" :key="index">
+      <div v-if="block.tekst" class="text">
         <h2>{{ block.overskrift }}</h2>
         <div v-html="block.tekst.content"></div>
       </div>
-      <div v-if="block.__typename === 'InnholdBilde'" class="image">
+      <div v-if="block.bilde" class="image">
         <img :src="block.bilde[0].fullWidth" />
       </div>
-      <div v-if="block.__typename === 'InnholdTrekkspill'" class="accordion" :id="`accordion-${index}`">
-        <h2 @click="readMore('accordion-' + index)" class="accordion-key">{{ block.overskrift }}</h2>
+      <div v-if="block.trekkspill" class="accordion">
+        <h2>{{ block.overskrift }}</h2>
         <div class="accordion-content" v-html="block.tekst.content"></div>
       </div>
     </div>
-    <TiltakArrows />
   </main>
 </template>
 
@@ -46,10 +45,10 @@ export default {
     }
   },
   apollo: {
-    hjem: gql`
+    om: gql`
     query {
-      hjem: entry(title: "Hjem") {
-        ... on Hjem {
+      om: entry(title: "Om") {
+        ... on Om {
           overskrift
           ingress
           toppbilde {

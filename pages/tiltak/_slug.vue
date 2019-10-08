@@ -5,10 +5,28 @@
         :title="tiltak.title"
         :lead="tiltak.ingress"
       />
-      <img class="main-illustration" :src="`/images/${tiltak.slug}.jpg`" />
-      <div class="content" v-html="tiltak.innhold.content"></div>
-      <TiltakArrows />
+      <img v-if="tiltak.toppbilde.length" class="main-illustration" :src="tiltak.toppbilde[0].fullWidth" />
+      <div v-for="(block, index) in tiltak.innhold" :key="index">
+        <div v-if="block.__typename === 'InnholdTekst'" class="text">
+          <h2>{{ block.overskrift }}</h2>
+          <div v-html="block.tekst.content"></div>
+        </div>
+        <div v-if="block.__typename === 'InnholdBilde'" class="image">
+          <img :src="block.bilde[0].fullWidth" />
+        </div>
+        <div v-if="block.__typename === 'InnholdTrekkspill'" class="accordion" :id="`accordion-${index}`">
+          <h2 @click="readMore('accordion-' + index)" class="read-more">{{ block.overskrift }}</h2>
+          <div class="content" v-html="block.tekst.content"></div>
+        </div>
+        <div v-if="block.__typename === 'InnholdFremhevetTekst'" class="text large">
+          <div v-html="block.tekst.content"></div>
+        </div>
+        <div v-if="block.__typename === 'InnholdPdf'" class="pdf">
+          <a :href="block.pdf[0].url" target="_blank">{{ block.lenketekst }}</a>
+        </div>
+      </div>
     </section>
+    <TiltakArrows :current="tiltak.slug" />
   </main>
 </template>
 
@@ -34,6 +52,11 @@ export default {
       ]
     }
   },
+  methods: {
+    readMore: function(id) {
+      document.getElementById(id).classList.toggle('visible')
+    }
+  },
   apollo: {
     tiltak: {
       variables() {
@@ -45,8 +68,43 @@ export default {
           ... on Tiltak {
             title
             ingress
+            toppbilde {
+              fullWidth: url(transform: fullWidth)
+            }
             innhold {
-              content
+              ... on InnholdTekst {
+                __typename
+                overskrift
+                tekst {
+                  content
+                }
+              }
+              ... on InnholdBilde {
+                __typename
+                bilde {
+                  fullWidth: url(transform: fullWidth)
+                }
+              }
+              ... on InnholdTrekkspill {
+                __typename
+                overskrift
+                tekst {
+                  content
+                }
+              }
+              ... on InnholdFremhevetTekst {
+                __typename
+                tekst {
+                  content
+                }
+              }
+              ... on InnholdPdf {
+                __typename
+                pdf {
+                  url
+                }
+                lenketekst
+              }
             }
             slug
           }
@@ -59,8 +117,51 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/assets/css/variables.scss';
-.site-main {
-  padding-bottom: 10rem;
+.tiltak-page {
+  padding-bottom: 5rem;
+}
+.text {
+  h2 {
+    margin-top: 3rem;
+  }
+  &.large {
+    font-size: 2rem;
+    line-height: 1.2;
+  }
+}
+.image {
+  max-width: 1200px;
+  margin: 2rem auto;
+}
+.accordion {
+  width: 100%;
+  max-width: $width-s;
+  margin: 2rem auto;
+  padding: .5rem 0;
+  border-top: 2px solid $color-black;
+  border-bottom: 2px solid $color-black;
+  .read-more {
+    cursor: pointer;
+    margin: 0;
+    &:after {
+      content: "▼";
+      float: right;
+    }
+  }
+  .content {
+    margin: 1rem auto;
+    display: none;
+  }
+  &.visible {
+    .content {
+      display: block;
+    }
+    .read-more {
+      &:after {
+        content: "▲";
+      }
+    }
+  }
 }
 </style>
 
