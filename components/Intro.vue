@@ -1,8 +1,8 @@
 <template>
   <div class="intro">
     <h1>{{ title }}</h1>
-    <section class="tiltak-top">
-      <p>{{ lead }}</p>
+    <section class="top">
+      <p v-if="lead">{{ lead }}</p>
       <TiltakNav />
     </section>
   </div>
@@ -26,9 +26,9 @@ export default {
 <style lang="scss" scoped>
 @import '@/assets/css/variables.scss';
 .intro {
-  padding: 2rem 0;
+  padding: 0;
 }
-.tiltak-top {
+.top {
   position: relative;
 }
 </style>

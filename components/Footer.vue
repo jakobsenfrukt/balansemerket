@@ -36,7 +36,7 @@
   padding: 2rem;
 }
 .columns {
-  margin: auto;
+  margin: 0 auto 4rem;
 
   div {
     width: 28%;
@@ -64,11 +64,10 @@
   }
 }
 .footnote {
-  text-align: center;
+  float: left;
   font-size: .8rem;
   text-transform: uppercase;
   letter-spacing: .05em;
-  padding: 4rem 2rem 2rem;
 }
 .to-top {
   text-decoration: none;

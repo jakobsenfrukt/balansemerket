@@ -1,11 +1,10 @@
 <template>
   <main class="site-main">
-    <section class="ressurs-page">
+    <section class="page ressurs-page">
       <Intro
-        :title="ressurs.title"
-        :lead="ressurs.ingress"
+        :title="ressurser.title"
       />
-      <div v-for="(block, index) in ressurs.innhold" :key="index">
+      <div v-for="(block, index) in ressurser.innhold" :key="index">
         <div v-if="block.tekst" v-html="block.tekst.content"></div>
         <div v-if="block.bilde">
           <img :src="block.bilde[0].fullWidth" />
@@ -15,7 +14,7 @@
           <div class="content" v-html="block.tekst.content"></div>
         </div>
       </div>
-      <ressursArrows :current="ressurs.slug" />
+      <ressursArrows :current="ressurser.slug" />
     </section>
   </main>
 </template>
@@ -35,7 +34,7 @@ export default {
         { 
           hid: 'description', 
           name: 'description', 
-          content: 'ressurs for et trygt kulturliv.' 
+          content: 'Tiltak for et trygt kulturliv.' 
         }
       ]
     }
@@ -50,10 +49,6 @@ export default {
         ressurser: entry(slug: $slug) {
           ... on Ressurser {
             title
-            ingress
-            toppbilde {
-              fullWidth: url(transform: fullWidth)
-            }
             innhold {
               ... on InnholdTekst {
                 __typename

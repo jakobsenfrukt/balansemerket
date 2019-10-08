@@ -9,8 +9,8 @@
     </div>
     <div class="site-nav" :class="{ open: open }">
       <nav>
-        <a v-for="(tiltak, index) in tiltak" :key="index" :href="`/tiltak/${tiltak.slug}`">
-          {{ tiltak.title }} <Wave />
+        <a v-for="(page, index) in page" :key="index" :href="`/${page.slug}`">
+          {{ page.title }} <Wave />
         </a>
       </nav>
     </div>
@@ -29,22 +29,18 @@ export default {
   data: function() {
     return {
       open: false,
-      tiltak: [
+      page: [
         {
           title: "Hjem",
-          slug: "hjem"
-        },
-        {
-          title: "Tiltak",
-          slug: "tiltak"
+          slug: "#"
         },
         {
           title: "Ressurser",
-          slug: "yo"
+          slug: "ressurser"
         },
         {
           title: "Om merket",
-          slug: "yo"
+          slug: "om"
         }
       ]
     }
