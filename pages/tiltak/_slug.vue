@@ -1,12 +1,12 @@
 <template>
   <main class="site-main">
-    <section class="tiltak-page">
+    <section class="page tiltak-page">
       <Intro
         :title="tiltak.title"
         :lead="tiltak.ingress"
       />
       <img v-if="tiltak.toppbilde.length" class="main-illustration" :src="tiltak.toppbilde[0].fullWidth" />
-      <div v-for="(block, index) in tiltak.innhold" :key="index">
+      <div v-for="(block, index) in tiltak.innhold" :key="index" :class="block.__typename">
         <div v-if="block.__typename === 'InnholdTekst'" class="text">
           <h2>{{ block.overskrift }}</h2>
           <div v-html="block.tekst.content"></div>
@@ -117,18 +117,6 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/assets/css/variables.scss';
-.tiltak-page {
-  padding-bottom: 5rem;
-}
-.text {
-  h2 {
-    margin-top: 3rem;
-  }
-  &.large {
-    font-size: 2rem;
-    line-height: 1.2;
-  }
-}
 .image {
   max-width: 1200px;
   margin: 2rem auto;
@@ -136,20 +124,24 @@ export default {
 .accordion {
   width: 100%;
   max-width: $width-s;
-  margin: 2rem auto;
-  padding: .5rem 0;
+  margin: 2rem auto 0;
+  padding: .8rem 0;
   border-top: 2px solid $color-black;
   border-bottom: 2px solid $color-black;
   .read-more {
     cursor: pointer;
     margin: 0;
+    padding-right: 2rem;
+    position: relative;
     &:after {
       content: "▼";
-      float: right;
+      position: absolute;
+      right: 0;
+      top: 0;
     }
   }
   .content {
-    margin: 1rem auto;
+    margin: 2rem auto;
     display: none;
   }
   &.visible {
@@ -161,6 +153,26 @@ export default {
         content: "▲";
       }
     }
+  }
+}
+.InnholdTrekkspill + .InnholdTrekkspill {
+  .accordion {
+    border-top: none;
+    margin-top: 0;
+  }
+}
+.InnholdTekst + .InnholdTrekkspill {
+  margin-top: 4rem;
+}
+.pdf {
+  max-width: $width-s;
+  margin: 2rem auto;
+  color: $color-red;
+  font-weight: 700;
+  font-size: 1.4rem;
+  line-height: 1.2;
+  &:before {
+    content: "→ ";
   }
 }
 </style>

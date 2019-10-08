@@ -4,6 +4,8 @@ import { createHttpLink } from 'apollo-link-http';
 import { setContext } from 'apollo-link-context';
 import gql from 'graphql-tag'
 
+import getApolloConfig, { token } from './apollo.config'
+
 export default {
   mode: 'universal',
 
@@ -63,16 +65,16 @@ export default {
 
   generate: {
     routes: function () {
-      const uri = 'https://balansemerket.jakobsenfrukt.no/craft/api'
-      
+      const config = getApolloConfig()
+      const uri = config.httpEndpoint
+      // console.log(lol().cache)
       const httpLink = createHttpLink({
         uri: uri,
-        fetch: fetch
+        fetch: fetch,
+        cache: config.cache,
       });
       
       const authLink = setContext((_, { headers }) => {
-        const token = 'DLxomPNNuYLVfh8RXClON9NJwTo0VJpP2kYRzq24qVEmBZwaXsWGxmTJw_gRWST9';
-        // return the headers to the context so httpLink can read them
         return {
           headers: {
             ...headers,
@@ -91,11 +93,20 @@ export default {
               slug
             }
           }
+          ressurser: entries(section:ressurser) {
+            ... on Ressurser {
+              slug
+            }
+          }
         }`
       }
       // For single execution operations, a Promise can be use
       return makePromise(execute(link, operation))
-      .then(result => { return result.data.tiltak.map(project => `/tiltak/${tiltak.slug}/`)})
+      .then(result => { 
+        var tiltakArray = result.data.tiltak.map(tiltak => `/tiltak/${tiltak.slug}/`)
+        var ressursArray = result.data.ressurser.map(ressurser => `/ressurser/${ressurser.slug}/`)
+        return tiltakArray.concat(ressursArray)
+      })
       .catch(error => console.log(`received error ${error}`))
     }
   },

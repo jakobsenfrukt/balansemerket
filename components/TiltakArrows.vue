@@ -82,6 +82,33 @@ export default {
     text-decoration: none;
     display: block;
     font-size: 3rem;
+    transition: all .2s ease-in-out;
+    &:hover {
+      color: $color-red;
+      border-color: $color-red;
+    }
+  }
+  .next {
+    text-align: right;
+  }
+  .prev {
+    text-align: left;
+  }
+
+  @media (max-width: $media-s) {
+    flex-wrap: wrap;
+    a {
+      font-size: 2rem;
+    }
+    .next, .prev {
+      width: 100%;
+    }
+    .next {
+      order: 1;
+    }
+    .prev {
+      order: 2;
+    }
   }
 }
 </style>

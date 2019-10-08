@@ -3,7 +3,7 @@
     <h1>{{ title }}</h1>
     <section class="tiltak-top">
       <p>{{ lead }}</p>
-      <TiltakNav class="nav" />
+      <TiltakNav />
     </section>
   </div>
 </template>
@@ -26,22 +26,9 @@ export default {
 <style lang="scss" scoped>
 @import '@/assets/css/variables.scss';
 .intro {
-  padding: 2rem;
+  padding: 2rem 0;
 }
 .tiltak-top {
   position: relative;
-
-  .nav {
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
-
-  @media (max-width: $media-s) {
-    .nav {
-      position: static;
-      margin: 3rem auto;
-    }
-  }
 }
 </style>

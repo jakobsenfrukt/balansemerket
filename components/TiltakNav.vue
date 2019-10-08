@@ -47,6 +47,16 @@ export default {
   a {
     text-decoration: none;
     display: block;
+    border: none;
+  }
+
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  @media (max-width: $media-m) {
+    position: static;
+    margin: 3rem auto;
   }
 }
 </style>

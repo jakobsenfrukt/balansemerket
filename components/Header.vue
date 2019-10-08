@@ -3,7 +3,11 @@
     <div class="logo">
       <a href="/"><Logo /></a>
     </div>
-    <div class="site-nav">
+    <div class="menu-toggle" :class="{ open: open }" @click="open = !open">
+      <template v-if="open">&#9776;</template>
+      <template v-else>&#9776;</template>
+    </div>
+    <div class="site-nav" :class="{ open: open }">
       <nav>
         <a v-for="(tiltak, index) in tiltak" :key="index" :href="`/tiltak/${tiltak.slug}`">
           {{ tiltak.title }} <Wave />
@@ -24,6 +28,7 @@ export default {
   },
   data: function() {
     return {
+      open: false,
       tiltak: [
         {
           title: "Hjem",
@@ -84,6 +89,60 @@ export default {
     position: absolute;
     bottom: -.6rem;
     left: 30%;
+  }
+}
+.menu-toggle {
+  cursor: pointer;
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  font-size: 2rem;
+
+  /*width: 2rem;
+  height: 3px;
+  background: $color-black;
+  position: relative;
+  &:before, &:after {
+    content: " ";
+    display: block;
+    width: 2rem;
+    height: 3px;
+    background: $color-black;
+    position: absolute;
+    top: -8px;
+  }
+  &:after {
+    top: auto;
+    bottom: -8px;
+  }*/
+  
+  display: none;
+}
+
+@media (max-width: $media-s) {
+  .site-header {
+    display: block;
+  }
+  .site-nav {
+    margin: 1rem auto;
+    display: none;
+
+    a {
+      font-size: 1.4rem;
+      display: block;
+      margin: 1rem 0;
+    }
+    .wave {
+      display: none;
+    }
+
+    &.open {
+      display: block;
+    }
+  }
+
+  .menu-toggle {
+    display: block;
   }
 }
 </style>

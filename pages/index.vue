@@ -1,23 +1,25 @@
 <template>
   <main class="site-main">
-    <Intro
-      :title="hjem.overskrift"
-      :lead="hjem.ingress"
-    />
-    <img v-if="hjem.toppbilde.length" class="main-illustration" :src="hjem.toppbilde[0].fullWidth" />
-    <div v-for="(block, index) in hjem.innhold" :key="index">
-      <div v-if="block.__typename === 'InnholdTekst'" class="text">
-        <h2>{{ block.overskrift }}</h2>
-        <div v-html="block.tekst.content"></div>
+    <section class="page index">
+      <Intro
+        :title="hjem.overskrift"
+        :lead="hjem.ingress"
+      />
+      <img v-if="hjem.toppbilde.length" class="main-illustration" :src="hjem.toppbilde[0].fullWidth" />
+      <div v-for="(block, index) in hjem.innhold" :key="index">
+        <div v-if="block.__typename === 'InnholdTekst'" class="text">
+          <h2>{{ block.overskrift }}</h2>
+          <div v-html="block.tekst.content"></div>
+        </div>
+        <div v-if="block.__typename === 'InnholdBilde'" class="image">
+          <img :src="block.bilde[0].fullWidth" />
+        </div>
+        <div v-if="block.__typename === 'InnholdTrekkspill'" class="accordion" :id="`accordion-${index}`">
+          <h2 @click="readMore('accordion-' + index)" class="accordion-key">{{ block.overskrift }}</h2>
+          <div class="accordion-content" v-html="block.tekst.content"></div>
+        </div>
       </div>
-      <div v-if="block.__typename === 'InnholdBilde'" class="image">
-        <img :src="block.bilde[0].fullWidth" />
-      </div>
-      <div v-if="block.__typename === 'InnholdTrekkspill'" class="accordion" :id="`accordion-${index}`">
-        <h2 @click="readMore('accordion-' + index)" class="accordion-key">{{ block.overskrift }}</h2>
-        <div class="accordion-content" v-html="block.tekst.content"></div>
-      </div>
-    </div>
+    </section>
     <TiltakArrows />
   </main>
 </template>
