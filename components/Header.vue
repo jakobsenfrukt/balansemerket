@@ -35,11 +35,19 @@ export default {
           slug: "#"
         },
         {
+          title: "Tiltak",
+          slug: "tiltak"
+        },
+        {
           title: "Ressurser",
           slug: "ressurser"
         },
         {
           title: "Om merket",
+          slug: "om"
+        },
+        {
+          title: "Til Balansekunst",
           slug: "om"
         }
       ]

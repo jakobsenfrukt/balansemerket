@@ -61,6 +61,19 @@
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      display: inline-block;
+      border-bottom: 2px solid $color-text;
+      line-height: 1;
+      transition: all .2s ease-in-out;
+      &:hover {
+        color: $color-red;
+        border-color: $color-red;
+      }
+    }
   }
 }
 .footnote {
@@ -75,5 +88,17 @@
   float: right;
   line-height: 1;
   border-bottom: 2px solid $color-black;
+}
+@media (max-width: $width-s) {
+  .site-footer {
+    padding-bottom: 5rem;
+  }
+  .columns {
+    div {
+      &:nth-child(1), &:nth-child(2), &:nth-child(3) {
+        margin-left: 0;
+      }
+    }
+  }
 }
 </style>

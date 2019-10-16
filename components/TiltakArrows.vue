@@ -1,11 +1,11 @@
 <template>
   <nav v-if="current" class="tiltak-arrows">
     <div class="prev">
-      <a v-if="arrows.prev" :href="arrows.prev.slug">&larr; {{ arrows.prev.title }}</a>
+      <a v-if="arrows.prev" :href="`/tiltak/${arrows.prev.slug}`">&larr; {{ arrows.prev.title }}</a>
       <a v-else href="/">&larr; Forsiden</a>
     </div>
     <div class="next">
-      <a v-if="arrows.next" :href="arrows.next.slug">{{ arrows.next.title }} &rarr;</a>
+      <a v-if="arrows.next" :href="`/tiltak/${arrows.next.slug}`">{{ arrows.next.title }} &rarr;</a>
       <a v-else href="/om">Om merket &rarr;</a>
     </div>
   </nav>
@@ -75,11 +75,12 @@ export default {
 <style lang="scss" scoped>
 @import '@/assets/css/variables.scss';
 .tiltak-arrows {
-  padding: 2rem;
+  padding-top: 7rem;
   display: flex;
   justify-content: space-between;
   a {
     text-decoration: none;
+    border: none;
     display: block;
     font-size: 3rem;
     transition: all .2s ease-in-out;
