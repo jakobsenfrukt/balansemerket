@@ -1,5 +1,5 @@
 <template>
-  <section class="members">
+  <section class="members" id="deltakere">
     <h2>Deltakere i ordningen</h2>
     <div v-if="deltakere.deltakere.length" class="member-list">
       <a v-for="(member, index) in deltakere.deltakere" :key="index" :href="member.nettsideUrl" target="_blank" class="member">
