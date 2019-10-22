@@ -1,7 +1,7 @@
 <template>
   <section class="members">
     <h2>Deltakere i ordningen</h2>
-    <div class="member-list">
+    <div v-if="deltakere.deltakere.length" class="member-list">
       <a v-for="(member, index) in deltakere.deltakere" :key="index" :href="member.nettsideUrl" target="_blank" class="member">
         <div class="member-logo">
           <img :src="member.logo[0].url" />
@@ -11,6 +11,10 @@
           <p>{{ member.tekst }}</p>
         </div>
       </a>
+    </div>
+    <div v-else>
+      <p>&mdash;</p>
+      <p>Bli den første! Send en mail til <a href="mailto:hei@balansekunstprosjektet.no">hei@balansekunstprosjektet.no</a></p>
     </div>
   </section>
 </template>
