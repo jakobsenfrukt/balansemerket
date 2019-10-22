@@ -6,6 +6,7 @@
         <div v-html="block.tekst.content"></div>
       </div>
     </div>
+    <a href="https://balansekunstprosjektet.no/" target="_blank" class="bklogo"><BKLogo /></a>
     <div class="footnote">
       {{ globals.footer.bunntekst }}
     </div>
@@ -17,8 +18,12 @@
 
 <script>
 import gql from 'graphql-tag'
+import BKLogo from '~/components/atoms/BKLogo.vue'
 
 export default {
+  components: {
+    BKLogo
+  },
   apollo: {
     globals: gql`
     query {
@@ -112,5 +117,9 @@ export default {
       }
     }
   }
+}
+.bklogo {
+  display: block;
+  margin: 1rem 0;
 }
 </style>
