@@ -12,7 +12,7 @@ export const token = 'DLxomPNNuYLVfh8RXClON9NJwTo0VJpP2kYRzq24qVEmBZwaXsWGxmTJw_
 
 export default function(ctx) {
   return {
-    httpEndpoint: ('https://balansemerket.jakobsenfrukt.no/craft/api'),
+    httpEndpoint: ('https://balansemerket.no/craft/api'),
     cache: new InMemoryCache({ fragmentMatcher }),
     wsEndpoint: null,
     httpLinkOptions: {

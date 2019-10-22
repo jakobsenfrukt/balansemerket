@@ -60,7 +60,7 @@ export default {
   },
 
   proxy: [
-    [ 'https://balansemerket.jakobsenfrukt.no/craft/api', { ws: false } ]
+    [ 'https://balansemerket.no/craft/api', { ws: false } ]
   ],
 
   generate: {
