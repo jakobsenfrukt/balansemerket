@@ -97,6 +97,9 @@ export default {
             ... on Ressurser {
               slug
             }
+            ... on RessurserPdfRessurs {
+              slug
+            }
           }
         }`
       }
