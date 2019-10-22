@@ -23,18 +23,18 @@
           <a :href="block.pdf[0].url" target="_blank">{{ block.lenketekst }}</a>
         </div>
       </div>
-      <TiltakNav />
     </section>
+    <Memberlist />
   </main>
 </template>
 
 <script>
 import gql from 'graphql-tag'
-import TiltakNav from '~/components/TiltakNav.vue'
+import Memberlist from '~/components/Memberlist.vue'
 
 export default {
   components: {
-    TiltakNav
+    Memberlist
   },
   head () {
     return {

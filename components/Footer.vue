@@ -1,32 +1,44 @@
 <template>
   <footer class="site-footer">
     <div class="columns">
-      <div>
-        <h3>Kontakt oss</h3>
-        <p>
-          Vi tilbyr workshops som kan bidra til økt bevisstgjøring og en åpen dialog i virksomheten. Les om våre workshoptilbud her.
-          <a href="mailto:hei@balansekunstprosjektet.no" target="_blank">hei@balansekunstprosjektet.no</a>
-        </p>
-      </div>
-      <div>
-        <h3>Våre medlemmer</h3>
-        <p>
-          Se liste over kulturinstitusjoner som har gjennomgått kurs med oss.
-        </p>
-      </div>
-      <div>
-        <h3>Balansekunst</h3>
-        Balansemerket er et initiativ fra Balansekunst. Balansekunst er et samarbeid mellom over 70 norske kunst- og kulturorganisasjoner som jobber for et likestilt og mangfoldig kulturliv.
+      <div v-for="(block, index) in globals.footer.tekstkolonner" :key="index" class="column">
+        <h3 v-if="block.overskrift">{{ block.overskrift }}</h3>
+        <div v-html="block.tekst.content"></div>
       </div>
     </div>
     <div class="footnote">
-      Balansemerket er utviklet med støtte fra Kulturdepartementet
+      {{ globals.footer.bunntekst }}
     </div>
     <a class="to-top" href="#">
       Til toppen
     </a>
   </footer>
 </template>
+
+<script>
+import gql from 'graphql-tag'
+
+export default {
+  apollo: {
+    globals: gql`
+    query {
+      globals {
+        footer {
+          tekstkolonner {
+            ... on TekstkolonnerTekstkolonne {
+              overskrift
+              tekst {
+                content
+              }
+            }
+          }
+          bunntekst
+        }
+      }
+    }`
+  }
+}
+</script>
 
 <style lang="scss" scoped>
 @import '@/assets/css/variables.scss';
@@ -38,7 +50,7 @@
 .columns {
   margin: 0 auto 4rem;
 
-  div {
+  .column {
     width: 28%;
     min-width: 280px;
     display: block;

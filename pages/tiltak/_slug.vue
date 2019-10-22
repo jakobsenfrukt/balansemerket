@@ -118,63 +118,6 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/assets/css/variables.scss';
-.image {
-  max-width: 1200px;
-  margin: 2rem auto;
-}
-.accordion {
-  width: 100%;
-  max-width: $width-s;
-  margin: 2rem auto 0;
-  padding: .8rem 0;
-  border-top: 2px solid $color-black;
-  border-bottom: 2px solid $color-black;
-  .read-more {
-    cursor: pointer;
-    margin: 0;
-    padding-right: 2rem;
-    position: relative;
-    &:after {
-      content: "▼";
-      position: absolute;
-      right: 0;
-      top: 0;
-    }
-  }
-  .content {
-    margin: 2rem auto;
-    display: none;
-  }
-  &.visible {
-    .content {
-      display: block;
-    }
-    .read-more {
-      &:after {
-        content: "▲";
-      }
-    }
-  }
-}
-.InnholdTrekkspill + .InnholdTrekkspill {
-  .accordion {
-    border-top: none;
-    margin-top: 0;
-  }
-}
-.InnholdTekst + .InnholdTrekkspill {
-  margin-top: 4rem;
-}
-.pdf {
-  max-width: $width-s;
-  margin: 2rem auto;
-  color: $color-red;
-  font-weight: 700;
-  font-size: 1.4rem;
-  line-height: 1.2;
-  &:before {
-    content: "→ ";
-  }
-}
+
 </style>
 

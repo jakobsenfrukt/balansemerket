@@ -9,9 +9,10 @@
     </div>
     <div class="site-nav" :class="{ open: open }">
       <nav>
-        <a v-for="(page, index) in page" :key="index" :href="`/${page.slug}`">
+        <a v-for="(page, index) in page" :key="index" :href="`${page.slug}`">
           {{ page.title }} <Wave />
         </a>
+        <a class="balansekunst-link" href="https://balansekunstprosjektet.no" target="_blank">Til Balansekunst &#8599;</a>
       </nav>
     </div>
   </header>
@@ -32,23 +33,19 @@ export default {
       page: [
         {
           title: "Hjem",
-          slug: "#"
+          slug: "/#"
         },
         {
           title: "Tiltak",
-          slug: "tiltak"
+          slug: "/tiltak"
         },
         {
           title: "Ressurser",
-          slug: "ressurser"
+          slug: "/ressurser"
         },
         {
           title: "Om merket",
-          slug: "om"
-        },
-        {
-          title: "Til Balansekunst",
-          slug: "om"
+          slug: "/om"
         }
       ]
     }
@@ -85,8 +82,20 @@ export default {
     margin: 0 1rem;
     position: relative;
     font-size: .8rem;
-    &:last-of-type {
+    &:nth-of-type(4) {
       margin-right: 0;
+    }
+    &.balansekunst-link {
+      position: absolute;
+      top: 0;
+      right: 0;
+      margin: 0;
+      font-size: .6rem;
+      text-decoration: none;
+      padding: .2rem .4rem;
+      background: #dddddd;
+      text-transform: uppercase;
+      letter-spacing: .05em;
     }
   }
   .wave {
@@ -135,6 +144,17 @@ export default {
       font-size: 1.4rem;
       display: block;
       margin: 1rem 0;
+      &.balansekunst-link {
+        margin: 1rem 0;
+        position: static;
+        font-size: .8rem;
+        display: inline-block;
+        text-decoration: none;
+        padding: .2rem .4rem;
+        background: none;
+        text-transform: uppercase;
+        letter-spacing: .05em;
+      }
     }
     .wave {
       display: none;

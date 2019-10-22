@@ -9,11 +9,18 @@
       <a v-else href="/om">Om merket &rarr;</a>
     </div>
   </nav>
+  <nav v-else-if="index" class="tiltak-arrows index">
+    <div class="prev">
+    </div>
+    <div class="next">
+      <a :href="`tiltak`">Tiltak &rarr;</a>
+    </div>
+  </nav>
   <nav v-else class="tiltak-arrows index">
     <div class="prev">
     </div>
     <div class="next">
-      <a :href="`tiltak/${tiltak[0].slug}`">{{ tiltak[0].title }} &rarr;</a>
+      <a :href="`/tiltak/${tiltak[0].slug}`">{{ tiltak[0].title }} &rarr;</a>
     </div>
   </nav>
 </template>
@@ -38,7 +45,8 @@ export default {
     }`
   },
   props: {
-    current: String
+    current: String,
+    index: Boolean
   },
   computed: {
     arrows() {
