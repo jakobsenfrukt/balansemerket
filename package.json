@@ -18,7 +18,8 @@
     "apollo-link-context": "^1.0.18",
     "apollo-link-http": "^1.5.15",
     "graphql-tag": "^2.10.1",
-    "nuxt": "^2.10.0"
+    "nuxt": "^2.10.0",
+    "nuxt-matomo": "^1.2.3"
   },
   "devDependencies": {
     "node-sass": "^4.12.0",
