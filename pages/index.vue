@@ -49,7 +49,7 @@ export default {
         { 
           hid: 'description', 
           name: 'description', 
-          content: 'Tiltak for et trygt kulturliv.' 
+          content: this.hjem.ingress
         }
       ]
     }

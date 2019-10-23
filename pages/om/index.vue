@@ -38,13 +38,13 @@ export default {
   },
   head () {
     return {
-      title: 'Balansemerket',
+      title: 'Om Balansemerket',
       meta: [
         // hid is used as unique identifier. Do not use `vmid` for it as it will not work
         { 
           hid: 'description', 
           name: 'description', 
-          content: 'Tiltak for et trygt kulturliv.' 
+          content: this.om.ingress
         }
       ]
     }

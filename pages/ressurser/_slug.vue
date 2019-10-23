@@ -31,13 +31,13 @@ import gql from 'graphql-tag'
 export default {
   head () {
     return {
-      title: 'Balansemerket',
+      title: this.ressurser.title,
       meta: [
         // hid is used as unique identifier. Do not use `vmid` for it as it will not work
         { 
           hid: 'description', 
           name: 'description', 
-          content: 'Tiltak for et trygt kulturliv.' 
+          content: this.ressurser.ingress
         }
       ]
     }
@@ -52,6 +52,7 @@ export default {
         ressurser: entry(slug: $slug) {
           ... on Ressurser {
             title
+            ingress
             innhold {
               ... on InnholdTekst {
                 __typename
