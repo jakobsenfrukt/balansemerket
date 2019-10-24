@@ -13,8 +13,7 @@
       </a>
     </div>
     <div v-else>
-      <p>&mdash;</p>
-      <p>Bli den første! Send en mail til <a href="mailto:hei@balansekunstprosjektet.no">hei@balansekunstprosjektet.no</a></p>
+      <div v-html="deltakere.reservetekst.content"></div>
     </div>
   </section>
 </template>
@@ -37,6 +36,9 @@ export default {
               }
               nettsideUrl
             }
+          }
+          reservetekst {
+            content
           }
         }
       }
