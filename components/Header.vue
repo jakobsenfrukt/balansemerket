@@ -12,6 +12,7 @@
         <a v-for="(page, index) in page" :key="index" :href="`${page.slug}`">
           {{ page.title }} <Wave />
         </a>
+        <a class="featured" href="https://kurs.balansemerket.no">Nettkurs</a>
         <a class="balansekunst-link" href="https://balansekunstprosjektet.no" target="_blank">Til Balansekunst &#8599;</a>
       </nav>
     </div>
@@ -82,8 +83,13 @@ export default {
     margin: 0 1rem;
     position: relative;
     font-size: .8rem;
-    &:nth-of-type(4) {
+    &:nth-of-type(5) {
       margin-right: 0;
+    }
+    &.featured {
+      background: #76C2AF;
+      padding: .2rem .8rem;
+      border-radius: 2rem;
     }
     &.balansekunst-link {
       position: absolute;
@@ -144,11 +150,17 @@ export default {
       font-size: 1.4rem;
       display: block;
       margin: 1rem 0;
+      &.featured {
+        display: inline-block;
+        background: #76C2AF;
+        padding: .4rem 1.2rem;
+        border-radius: 2rem;
+      }
       &.balansekunst-link {
         margin: 1rem 0;
         position: static;
         font-size: .8rem;
-        display: inline-block;
+        display: block;
         text-decoration: none;
         padding: .2rem .4rem;
         background: none;
