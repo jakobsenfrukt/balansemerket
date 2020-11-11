@@ -49,6 +49,11 @@ export default {
       ]
     }
   },
+  methods: {
+    readMore: function(id) {
+      document.getElementById(id).classList.toggle('visible')
+    }
+  },
   apollo: {
     om: gql`
     query {
