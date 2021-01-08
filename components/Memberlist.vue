@@ -1,6 +1,6 @@
 <template>
   <section class="members" id="deltakere">
-    <h2>Deltakere i ordningen</h2>
+    <h2>Disse har oppnådd Balansemerket</h2>
     <div v-if="deltakere.deltakere.length" class="member-list">
       <a v-for="(member, index) in deltakere.deltakere" :key="index" :href="member.nettsideUrl" target="_blank" class="member">
         <div class="member-logo">
