@@ -8,7 +8,7 @@
           <div v-html="block.tekst.content"></div>
         </div>
         <div v-if="block.__typename === 'InnholdBilde'" class="image">
-          <img :src="block.bilde[0].fullWidth" />
+          <img :src="block.bilde[0].fullWidth" :alt="block.bilde[0].title" />
         </div>
         <div v-if="block.__typename === 'InnholdTrekkspill'" class="accordion" :id="`accordion-${index}`">
           <h2 @click="readMore('accordion-' + index)" class="read-more">{{ block.overskrift }}</h2>
@@ -65,6 +65,7 @@ export default {
                 __typename
                 bilde {
                   fullWidth: url(transform: fullWidth)
+                  title
                 }
               }
               ... on InnholdTrekkspill {

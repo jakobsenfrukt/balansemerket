@@ -4,10 +4,10 @@
     <div v-if="deltakere.deltakere.length" class="member-list">
       <a v-for="(member, index) in deltakere.deltakere" :key="index" :href="member.nettsideUrl" target="_blank" class="member">
         <div class="member-logo">
-          <img :src="member.logo[0].url" />
+          <img :src="member.logo[0].url" :alt="member.logo[0].title" />
         </div>
         <div class="member-text">
-          <h3>{{ member.navn }}</h3>
+          <!--<h3>{{ member.navn }}</h3>-->
           <p>{{ member.tekst }}</p>
         </div>
       </a>
@@ -33,6 +33,7 @@ export default {
               tekst
               logo {
                 url
+                title
               }
               nettsideUrl
             }
@@ -89,6 +90,11 @@ export default {
       min-width: 5rem;
       max-height: 16rem;
       filter: grayscale(100%);
+      transition: filter .2s linear;
+
+      &:hover {
+        filter: grayscale(0);
+      }
     }
   }
   &-text {

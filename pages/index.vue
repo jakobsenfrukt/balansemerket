@@ -3,7 +3,7 @@
     <h1>{{ hjem.overskrift }}</h1>
     <section class="page index">
       <p v-if="hjem.ingress">{{ hjem.ingress }}</p>
-      <img v-if="hjem.toppbilde.length" class="main-illustration" :src="hjem.toppbilde[0].fullWidth" />
+      <img v-if="hjem.toppbilde.length" class="main-illustration" :src="hjem.toppbilde[0].fullWidth" :alt="hjem.toppbilde[0].title" />
       <div class="main-content" v-if="hjem.innhold.length">
         <div v-for="(block, index) in hjem.innhold" :key="index" :class="block.__typename">
           <div v-if="block.__typename === 'InnholdTekst'" class="text">
@@ -11,7 +11,7 @@
             <div v-html="block.tekst.content"></div>
           </div>
           <div v-if="block.__typename === 'InnholdBilde'" class="image">
-            <img :src="block.bilde[0].fullWidth" />
+            <img :src="block.bilde[0].fullWidth" :alt="block.bilde[0].title" />
           </div>
           <div v-if="block.__typename === 'InnholdTrekkspill'" class="accordion" :id="`accordion-${index}`">
             <h2 @click="readMore('accordion-' + index)" class="read-more">{{ block.overskrift }}</h2>
@@ -63,6 +63,7 @@ export default {
           ingress
           toppbilde {
             fullWidth: url(transform: fullWidth)
+            title
           }
           innhold {
             ... on InnholdTekst {
@@ -76,6 +77,7 @@ export default {
               __typename
               bilde {
                 fullWidth: url(transform: fullWidth)
+                title
               }
             }
             ... on InnholdTrekkspill {
