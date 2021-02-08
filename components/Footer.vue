@@ -53,20 +53,12 @@ export default {
   padding: 2rem;
 }
 .columns {
-  margin: 0 auto 4rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  margin: 4rem auto 2rem;
 
   .column {
-    width: 28%;
-    min-width: 280px;
-    display: block;
-    margin: 2rem auto;
-
-    &:nth-child(1) {
-      margin-left: 0;
-    }
-    &:nth-child(3) {
-      margin-right: 0;
-    }
+    padding-right: 3rem;
 
     h3, p {
       margin: 0 0 .5rem;
