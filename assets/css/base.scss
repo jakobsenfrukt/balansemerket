@@ -244,11 +244,26 @@ img.main-illustration {
   border-radius: 2rem;
   transition: all .2s ease;
   + .button {
-      margin-top: 0;
+    margin-top: 0;
   }
-
   &:hover {
-      color: #fff;
-      transform: scale(1.05);
+    color: #fff;
+    transform: scale(1.05);
   }
+  &:focus {
+    outline: none;
+  }
+  &.secondary {
+    background: #fff;
+    color: #000;
+    &:hover {
+      color: #000;
+      transform: scale(1.05);
+    }
+  }
+}
+
+
+.card p {
+  margin: 0;
 }

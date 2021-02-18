@@ -16,9 +16,13 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import '@/assets/css/variables.scss';
 .site-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
   width: 100%;
   padding: 2rem;
   line-height: 1.3;

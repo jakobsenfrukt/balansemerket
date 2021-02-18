@@ -3,15 +3,18 @@
     <HeaderMini />
     <nuxt />
     <div v-html="script"></div>
+    <Footer />
   </div>
 </template>
 
 <script>
 import HeaderMini from '~/components/HeaderMini.vue'
+import Footer from '~/components/samtalekort/Footer.vue'
 
 export default {
   components: {
-    HeaderMini
+    HeaderMini,
+    Footer
   },
   data: function() {
     return {

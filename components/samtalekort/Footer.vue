@@ -1,14 +1,14 @@
 <template>
   <footer class="site-footer">
-    <div class="columns">
-      <div v-for="(block, index) in globals.footer.tekstkolonner" :key="index" class="column">
-        <h3 v-if="block.overskrift">{{ block.overskrift }}</h3>
-        <div v-html="block.tekst.content"></div>
-      </div>
-    </div>
+    Utviklet av
     <a href="https://balansekunstprosjektet.no/" target="_blank" class="bklogo"><BKLogo invert /></a>
-    <div class="footnote">
-      {{ globals.footer.bunntekst }}
+    i samarbeid med
+    <div class="friends">
+      <div v-for="(partner, index) in cardIndex.partners" :key="index" class="friend">
+        <a :href="partner.websiteUrl" target="_blank">
+          <img :src="partner.logo[0].thumb" :alt="partner.logo[0].title" />
+        </a>
+      </div>
     </div>
     <a class="to-top" href="#">
       Til toppen
@@ -25,19 +25,20 @@ export default {
     BKLogo
   },
   apollo: {
-    globals: gql`
+    cardIndex: gql`
     query {
-      globals {
-        footer {
-          tekstkolonner {
-            ... on TekstkolonnerTekstkolonne {
-              overskrift
-              tekst {
-                content
+      cardIndex: entry(title: "Samtalekort: Forside") {
+        ... on CardsIndex {
+          partners {
+          ... on PartnersPartner {
+              partnerName
+              websiteUrl
+              logo {
+                thumb: url(transform: thumbnail)
+                title
               }
             }
           }
-          bunntekst
         }
       }
     }`
@@ -54,12 +55,12 @@ export default {
   background: $color-text;
   color: $color-background;
 }
-.columns {
+.friends {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: repeat(5, 1fr);
   margin: 2rem auto;
 
-  .column {
+  .friend {
     padding-right: 3rem;
 
     h3, p {
@@ -86,12 +87,6 @@ export default {
       }
     }
   }
-}
-.footnote {
-  float: left;
-  font-size: .8rem;
-  text-transform: uppercase;
-  letter-spacing: .05em;
 }
 .to-top {
   text-decoration: underline;
