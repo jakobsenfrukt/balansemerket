@@ -374,8 +374,8 @@ export default {
 }
 .intro, .end, .card-wrapper {
   min-height: 70vh;
-  width: 90%;
-  max-width: 800px;
+  width: 80%;
+  max-width: 1000px;
   margin: 2rem auto;
   &-content {
     width: 100%;
@@ -415,6 +415,10 @@ export default {
     }
   }
   .button {
+    width: 100%;
+  }
+  .intro, .end, .card-wrapper {
+    min-height: 50vh;
     width: 100%;
   }
 }
