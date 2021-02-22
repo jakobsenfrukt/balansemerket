@@ -165,7 +165,21 @@ img.main-illustration {
     }
   }
 }
+.content {
+  ul, ol {
+    max-width: $width-s;
+    margin: 0 auto 2rem;
+    padding-left: 2rem;
 
+    li {
+      margin-bottom: .6rem;
+
+      ul {
+        margin-top: 1rem;
+      }
+    }
+  }
+}
 .image {
   max-width: 1200px;
   margin: 2rem auto;
@@ -238,7 +252,7 @@ img.main-illustration {
   font-size: 1.2rem;
   text-decoration: none;
   padding: 1.2rem 2rem;
-  margin: 1.5rem auto;
+  margin: 1rem auto;
   cursor: pointer;
   border: none;
   border-radius: 2rem;
@@ -261,9 +275,33 @@ img.main-illustration {
       transform: scale(1.05);
     }
   }
+  &.disabled {
+    opacity: .3;
+    cursor: default;
+    &:hover {
+      transform: none;
+    }
+  }
+  &.close {
+    width: 3rem;
+    height: 3rem;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background-image: url('/graphics/close.svg');
+    background-size: 36%;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  @media (max-width: 800px) {
+    font-size: 1rem;
+  }
 }
 
 
 .card p {
-  margin: 0;
+  margin: 0 auto;
+  max-width: none;
 }

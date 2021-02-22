@@ -1,72 +1,97 @@
 <template>
   <main class="site-main">
     <h1 class="site-title">Samtalekort</h1>
-    <div @click="readMore('instructions')" class="read-more show-instructions">Hvordan bruke kortene</div>
+    <div @click="toggle('instructions')" class="read-more show-instructions">Hvordan bruke kortene</div>
     <section class="page samtalekort">
-      <div class="intro">
-        <strong>(Intro, vises før første kort)</strong><br /><br />
-        <div class="content" v-html="cardIndex.introText.content"></div>
-        <button class="button">Trekk et kort</button>
-        <button class="button secondary">Tilpass kortstokken</button>
-      </div>
-      <div class="card-counter">
-        {{cardNumber+1}} / {{ selectedCards.length }}
-      </div>
-      <div class="card current">
-        <div class="content" v-html="currentCard.cardText.content"></div>
-        <div class="dictionary-word" v-if="currentCard.words.length">
-          Hva betyr <a href="#" target="_blank" class="word">{{currentCard.words[0].title}}</a>?
+      <div class="intro" v-if="cardNumber === -1">
+        <div class="intro-content">
+          <div class="content" v-html="cardIndex.introText.content"></div>
+          <button class="button" @click="cardNumber++">Trekk et kort</button>
+          <button class="button secondary" @click="toggle('customize')">Tilpass kortstokken</button>
         </div>
       </div>
-      <nav class="card-nav">
-        <button class="button prev" @click="cardNumber--" v-if="cardNumber > 0">Forrige kort</button>
-        <button class="button next" @click="cardNumber++"  v-if="cardNumber < selectedCards.length-1">Neste kort</button>
-        <button class="button" @click="showEnd()"  v-if="cardNumber === selectedCards.length-1">Avslutt</button>
-      </nav>
-    </section>
-    <div class="customize" id="customize">
-      <h2>Tilpass kortstokken</h2>
-      <div class="customize-options customize-type">
-        <span>Vis kort etter type:</span>
-        <div>
-          <input type="checkbox" id="assertions" name="assertions" checked>
-          <label for="assertions">Påstander</label>
-        </div>
-        <div>
-          <input type="checkbox" id="questions" name="questions" checked>
-          <label for="questions">Refleksjonsspørsmål</label>
-        </div>
-      </div>
-      <div class="customize-options customize-category">
-        <span>Vis kort etter tema:</span>
-        <div>
-          <input type="checkbox" id="category1" name="category1" checked>
-          <label for="category1">Forebygge seksuell trakassering</label>
-        </div>
-        <div>
-          <input type="checkbox" id="category2" name="category2" checked>
-          <label for="category2">Utfordre normer</label>
-        </div>
-        <div>
-          <input type="checkbox" id="category3" name="category3" checked>
-          <label for="category3">Motvirke hersketeknikker</label>
-        </div>
-      </div>
-      <div class="cards">
-        <span>Velg hvilke kort som skal vises:</span>
-        <div class="card-list">
-          <div class="card" v-for="(card, index) in cards" :key="`card-${index}`">
-            <div class="content" v-html="card.cardText.content"></div>
+      <div class="card-wrapper" v-if="currentCard">
+        <div class="card current">
+          <div class="content" v-html="currentCard.cardText.content"></div>
+          <div class="dictionary-word" v-if="currentCard.words.length">
+            Hva betyr <a href="#" target="_blank" class="word">{{currentCard.words[0].title}}</a>?
           </div>
+        </div>
+        <nav class="card-nav">
+          <button class="button prev disabled" disabled v-if="cardNumber <= 0">Forrige kort</button>
+          <button class="button prev" @click="cardNumber--" v-if="cardNumber > 0">Forrige kort</button>
+          <button class="button next" @click="cardNumber++"  v-if="cardNumber < selectedCards.length-1">Neste kort</button>
+          <button class="button" @click="cardNumber++"  v-if="cardNumber === selectedCards.length-1">Avslutt</button>
+        </nav>
+        <div class="card-counter">
+          {{cardNumber+1}} / {{ selectedCards.length }}
+        </div>
+      </div>
+      <div class="end" v-if="cardNumber === selectedCards.length">
+        <div class="end-content">
+          <div class="content" v-html="cardIndex.endText.content"></div>
+          <button class="button" @click="cardNumber = -1">Start på nytt</button>
+        </div>
+      </div>
+    </section>
+    <div class="customize-open">
+      <button @click="toggle('customize')">Tilpass</button>
+    </div>
+    <div class="customize" id="customize">
+      <div class="customize-wrapper">
+        <h2>Tilpass kortstokken</h2>
+        <div class="customize-options customize-type">
+          <span>Vis kort etter type:</span>
+          <div>
+            <input type="checkbox" id="assertions" name="assertions" checked>
+            <label for="assertions">Påstander</label>
+          </div>
+          <div>
+            <input type="checkbox" id="questions" name="questions" checked>
+            <label for="questions">Refleksjonsspørsmål</label>
+          </div>
+        </div>
+        <div class="customize-options customize-category">
+          <span>Vis kort etter tema:</span>
+          <div>
+            <input type="checkbox" id="category1" name="category1" checked>
+            <label for="category1">Forebygge seksuell trakassering</label>
+          </div>
+          <div>
+            <input type="checkbox" id="category2" name="category2" checked>
+            <label for="category2">Utfordre normer</label>
+          </div>
+          <div>
+            <input type="checkbox" id="category3" name="category3" checked>
+            <label for="category3">Motvirke hersketeknikker</label>
+          </div>
+        </div>
+        <div class="cards">
+          <span>Velg hvilke kort som skal vises:</span>
+          <div class="card-list">
+            <div class="card" v-for="(card, index) in cards" :key="`card-${index}`">
+              <div class="content" v-html="card.cardText.content"></div>
+            </div>
+          </div>
+        </div>
+        <div class="customize-done">
+          <button class="button" @click="toggle('customize')">Ferdig</button>
+        </div>
+        <div class="customize-close">
+          <button class="button close" @click="toggle('customize')" aria-label="Lukk"></button>
         </div>
       </div>
     </div>
     <div class="instructions" id="instructions">
-      <div class="content" v-html="cardIndex.body.content"></div>
-    </div>
-    <div class="end">
-      <strong>(Avslutning, dukker opp etter siste kort)</strong><br /><br />
-      <div class="content" v-html="cardIndex.endText.content"></div>
+      <div class="instructions-wrapper">
+        <div class="content" v-html="cardIndex.body.content"></div>
+        <div class="instructions-done">
+          <button class="button" @click="toggle('instructions')">Sett i gang</button>
+        </div>
+        <div class="instructions-close">
+          <button class="button close" @click="toggle('instructions')" aria-label="Lukk"></button>
+        </div>
+      </div>
     </div>
   </main>
 </template>
@@ -82,25 +107,31 @@ export default {
   },
   data() {
     return {
-      cardNumber: 0
+      cardNumber: -1
     }
   },
   computed: {
     currentCard() {
-      return this.selectedCards[this.cardNumber]
+      if (this.cardNumber === -1) {
+        return false
+      } else if (this.cardNumber === this.selectedCards.length) {
+        return false
+      } else {
+        return this.selectedCards[this.cardNumber]
+      }
     },
     selectedCards() {
       return this.cards
     }
   },
   methods: {
-    readMore: function(id) {
+    toggle: function(id) {
       document.getElementById(id).classList.toggle('visible')
     }
   },
   head () {
     return {
-      title: 'Om Balansemerket',
+      title: 'Samtalekort | Balansemerket',
       meta: [
         // hid is used as unique identifier. Do not use `vmid` for it as it will not work
         { 
@@ -153,13 +184,14 @@ export default {
 <style lang="scss" scoped>
 .site-main {
   background: var(--color-yellow);
+  padding-bottom: 2rem;
 }
 .site-title {
   text-align: center;
   font-size: 1.8rem;
 }
 .page.samtalekort {
-  padding: 4rem 2rem;
+  padding: 1rem 2rem;
 }
 .intro {
   text-align: center;
@@ -180,12 +212,8 @@ export default {
   position: relative;
 
   &.current {
-    display: block;
-    width: 90%;
-    max-width: 800px;
-    margin: 2rem auto 3rem;
     font-size: 2rem;
-    padding: 4rem 4.2rem;
+    padding: 4rem;
   }
 }
 .dictionary-word {
@@ -210,7 +238,7 @@ export default {
 
   width: 100%;
   max-width: 800px;
-  margin: 0 auto;
+  margin: 3rem auto 2rem;
   .button {
     grid-column: span 1;
     margin: 0 auto;
@@ -224,12 +252,38 @@ export default {
   cursor: pointer;
 }
 .customize {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  padding: 2rem 2rem;
-  margin: 0 -2rem;
-  background: var(--color-green);
-  color: var(--color-black);
+  opacity: 0;
+  transform: translateY(-100%);
+  transition: all .3s ease;
+  
+  &.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: scroll;
+  background: rgba(0, 0, 0, .5);
+  padding: 2rem 2rem 6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 3rem 3rem 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
+    background: var(--color-green);
+    color: var(--color-black);
+    position: relative;
+    border-radius: 2rem;
+    box-shadow: 0 0 20px rgba(0, 0, 0, .4);
+  }
 
   h2 {
     grid-column: span 3;
@@ -244,17 +298,20 @@ export default {
     grid-column: span 3;
     margin-top: 2rem;
   }
+  .customize-done {
+    grid-column: span 2;
+  }
 }
 .card-list {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  margin: 0 auto;
+  grid-template-columns: repeat(4, 1fr);
+  margin: 0 auto 1rem;
   color: var(--color-black);
   .card {
     display: inline-block;
-    font-size: 13px;
-    width: 200px;
-    height: 150px;
+    font-size: 12px;
+    width: 220px;
+    height: 160px;
     border-radius: 18px;
     padding: 1rem;
     line-height: 1.3;
@@ -270,14 +327,32 @@ export default {
   border-bottom: 2px solid #000;
 }
 .instructions {
-  display: none;
-  position: absolute;
-  top: 3rem;
-  right: 0;
-  background: white;
-
+  opacity: 0;
+  transform: translateY(-100%);
+  transition: all .3s ease;
+  
   &.visible {
-    display: block;
+    opacity: 1;
+    transform: translateY(0);
+  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: scroll;
+  background: rgba(0, 0, 0, .5);
+  padding: 2rem 2rem 6rem;
+
+  &-wrapper {
+    padding: 3rem 3rem 2rem;
+    max-width: 700px;
+    margin: 0 auto;
+    background: var(--color-white);
+    color: var(--color-black);
+    position: relative;
+    border-radius: 2rem;
+    box-shadow: 0 0 20px rgba(0, 0, 0, .4);
   }
 }
 .end {
@@ -291,6 +366,21 @@ export default {
   max-width: 900px;
   margin: 0 auto;
 }
+.intro, .end, .card.current {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+}
+.intro, .end, .card-wrapper {
+  min-height: 70vh;
+  width: 90%;
+  max-width: 800px;
+  margin: 2rem auto;
+  &-content {
+    width: 100%;
+  }
+}
 /*
 .button {
   background: var(--color-green);
@@ -301,5 +391,32 @@ export default {
   }
 }
 */
+@media (max-width: 800px) {
+  .page.samtalekort {
+    padding: 0;
+  }
+  .site-title {
+    margin-top: 6rem;
+    font-size: 1.4rem;
+  }
+  .card {
+    &.current {
+      margin: 2rem 0;
+      width: 100%;
+      padding: 2rem 1.4rem;
+      font-size: 1.3rem;
+    }
+  }
+  .card-nav {
+    display: block;
+    margin-bottom: 2rem;
+    .button {
+      margin-bottom: 1rem;
+    }
+  }
+  .button {
+    width: 100%;
+  }
+}
 </style>
 
