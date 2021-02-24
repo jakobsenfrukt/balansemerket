@@ -282,7 +282,7 @@ img.main-illustration {
       transform: none;
     }
   }
-  &.close {
+  &.close, &-info {
     width: 3rem;
     height: 3rem;
     padding: 0;
@@ -290,7 +290,15 @@ img.main-illustration {
     position: absolute;
     top: 1rem;
     right: 1rem;
+  }
+  &.close {
     background-image: url('/graphics/close.svg');
+    background-size: 36%;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  &-info {
+    background-image: url('/graphics/question.svg');
     background-size: 36%;
     background-position: center;
     background-repeat: no-repeat;

@@ -1,7 +1,12 @@
 <template>
   <main class="site-main">
     <h1 class="site-title">Samtalekort</h1>
-    <div @click="toggle('instructions')" class="read-more show-instructions">Hvordan bruke kortene</div>
+
+    <div class="read-more show-instructions">
+      <span @click="toggle('instructions')">Hvordan bruke kortene</span>
+      <button class="button button-info" @click="toggle('instructions')" aria-label="Instruksjoner"></button>
+    </div>
+
     <section class="page samtalekort">
       <div class="intro" v-if="cardNumber === -1">
         <div class="intro-content">
@@ -11,17 +16,12 @@
         </div>
       </div>
       <div class="card-wrapper" v-if="currentCard">
-        <div class="card current">
-          <div class="content" v-html="currentCard.cardText.content"></div>
-          <div class="dictionary-word" v-if="currentCard.words.length">
-            Hva betyr <a href="#" target="_blank" class="word">{{currentCard.words[0].title}}</a>?
-          </div>
-        </div>
+        <CurrentCard class="current-card" :card="currentCard" />
         <nav class="card-nav">
+          <button class="button next" @click="cardNumber++"  v-if="cardNumber < selectedCards.length-1">Neste kort</button>
+          <button class="button the-end" @click="cardNumber++"  v-if="cardNumber === selectedCards.length-1">Avslutt</button>
           <button class="button prev disabled" disabled v-if="cardNumber <= 0">Forrige kort</button>
           <button class="button prev" @click="cardNumber--" v-if="cardNumber > 0">Forrige kort</button>
-          <button class="button next" @click="cardNumber++"  v-if="cardNumber < selectedCards.length-1">Neste kort</button>
-          <button class="button" @click="cardNumber++"  v-if="cardNumber === selectedCards.length-1">Avslutt</button>
         </nav>
         <div class="card-counter">
           {{cardNumber+1}} / {{ selectedCards.length }}
@@ -34,44 +34,31 @@
         </div>
       </div>
     </section>
+
     <div class="customize-open">
-      <button @click="toggle('customize')">Tilpass</button>
+      <button class="button" @click="toggle('customize')">Tilpass kortstokken</button>
+      <button class="button secondary" @click="alert('Stokker bunken!')">Stokk bunken</button>
     </div>
+
+    <div class="overlay" id="overlay"></div>
+
     <div class="customize" id="customize">
       <div class="customize-wrapper">
         <h2>Tilpass kortstokken</h2>
-        <div class="customize-options customize-type">
-          <span>Vis kort etter type:</span>
-          <div>
-            <input type="checkbox" id="assertions" name="assertions" checked>
-            <label for="assertions">Påstander</label>
-          </div>
-          <div>
-            <input type="checkbox" id="questions" name="questions" checked>
-            <label for="questions">Refleksjonsspørsmål</label>
-          </div>
-        </div>
         <div class="customize-options customize-category">
-          <span>Vis kort etter tema:</span>
-          <div>
-            <input type="checkbox" id="category1" name="category1" checked>
-            <label for="category1">Forebygge seksuell trakassering</label>
-          </div>
-          <div>
-            <input type="checkbox" id="category2" name="category2" checked>
-            <label for="category2">Utfordre normer</label>
-          </div>
-          <div>
-            <input type="checkbox" id="category3" name="category3" checked>
-            <label for="category3">Motvirke hersketeknikker</label>
-          </div>
+          <h3>Vis kort etter tema:</h3>
+          <FilterOption v-for="category in categories" :key="category.id" :option="category" class="category-option" checked />
+        </div>
+        <div class="customize-options customize-type">
+          <h3>Vis kort etter type:</h3>
+          <FilterOption v-for="type in cardTypes" :key="type.id" :option="type" class="type-option" checked />
         </div>
         <div class="cards">
-          <span>Velg hvilke kort som skal vises:</span>
+          <h3>Velg hvilke kort som skal vises:</h3>
+          <div>Velg alle</div>
+          <div>Fjern markeringer</div>
           <div class="card-list">
-            <div class="card" v-for="(card, index) in cards" :key="`card-${index}`">
-              <div class="content" v-html="card.cardText.content"></div>
-            </div>
+            <Card v-for="(card, index) in cards" :card="card" :key="`card-${index}`" checked/>
           </div>
         </div>
         <div class="customize-done">
@@ -82,6 +69,7 @@
         </div>
       </div>
     </div>
+
     <div class="instructions" id="instructions">
       <div class="instructions-wrapper">
         <div class="content" v-html="cardIndex.body.content"></div>
@@ -93,21 +81,38 @@
         </div>
       </div>
     </div>
+
   </main>
 </template>
 
 <script>
 import gql from 'graphql-tag'
+import CurrentCard from '~/components/samtalekort/CurrentCard.vue'
+import FilterOption from '~/components/samtalekort/FilterOption.vue'
+import Card from '~/components/samtalekort/Card.vue'
 import Footer from '~/components/samtalekort/Footer.vue'
 
 export default {
   layout: 'cards',
   components: {
+    CurrentCard,
+    FilterOption,
+    Card,
     Footer
   },
   data() {
     return {
-      cardNumber: -1
+      cardNumber: -1,
+      cardTypes: [
+        {
+          id: 'assertions',
+          title: 'Påstander'
+        },
+        {
+          id: 'questions',
+          title: 'Refleksjonsspørsmål'
+        }
+      ]
     }
   },
   computed: {
@@ -120,6 +125,15 @@ export default {
         return this.selectedCards[this.cardNumber]
       }
     },
+    nextCard() {
+      if (this.cardNumber === -2) {
+        return false
+      } else if (this.cardNumber === this.selectedCards.length-1) {
+        return false
+      } else {
+        return this.selectedCards[this.cardNumber+1]
+      }
+    },
     selectedCards() {
       return this.cards
     }
@@ -127,6 +141,7 @@ export default {
   methods: {
     toggle: function(id) {
       document.getElementById(id).classList.toggle('visible')
+      document.getElementById('overlay').classList.toggle('visible')
     }
   },
   head () {
@@ -176,6 +191,15 @@ export default {
           }
         }
       }
+    }`,
+    categories: gql`
+    query {
+      categories: categories {
+    		... on CardsCategory {
+          id
+          title
+        }
+      }
     }`
   }
 }
@@ -199,35 +223,6 @@ export default {
     margin-bottom: 2rem;
   }
 }
-.card {
-  display: inline-block;
-  background: white;
-  border-radius: 2rem;
-  box-shadow:
-    -2px 2px 0 1px rgb(212, 212, 212),
-    -.8rem .8rem 0 rgba(0, 0, 0, .2);
-  text-align: center;
-  padding: 2rem;
-  margin: 1rem;
-  position: relative;
-
-  &.current {
-    font-size: 2rem;
-    padding: 4rem;
-  }
-}
-.dictionary-word {
-  font-size: 16px;
-  color: var(--color-green);
-  position: absolute;
-  bottom: 1.5rem;
-  right: 2rem;
-  .word {
-    text-transform: lowercase;
-    border: none;
-    text-decoration: underline;
-  }
-}
 .card-counter {
   text-align: center;
 }
@@ -243,7 +238,7 @@ export default {
     grid-column: span 1;
     margin: 0 auto;
     width: 90%;
-    &.next {
+    &.next, &.the-end {
       grid-column: 2 / span 1;
     }
   }
@@ -254,7 +249,7 @@ export default {
 .customize {
   opacity: 0;
   transform: translateY(-100%);
-  transition: all .3s ease;
+  transition: all .5s ease;
   
   &.visible {
     opacity: 1;
@@ -266,11 +261,7 @@ export default {
   right: 0;
   bottom: 0;
   overflow-y: scroll;
-  background: rgba(0, 0, 0, .5);
   padding: 2rem 2rem 6rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 
   &-wrapper {
     display: grid;
@@ -290,46 +281,67 @@ export default {
     text-align: left;
     width: 100%;
     max-width: none;
+    margin-bottom: 2rem;
   }
-  span {
+  h3 {
     font-weight: 700;
+    display: block;
+    margin: .8rem 0;
   }
   .cards {
     grid-column: span 3;
     margin-top: 2rem;
   }
-  .customize-done {
+  &-done {
     grid-column: span 2;
+  }
+
+  &-open {
+    position: absolute;
+    bottom: 2rem;
+    right: 2rem;
+    background: var(--color-white);
+    border-radius: 12px;
+    .button {
+      font-size: 16px;
+      padding: .5rem .75rem;
+      margin: .5rem 0;
+      width: 10rem;
+      transform: translateX(-15px);
+    }
+    box-shadow:
+      5px -5px 0 rgba(0, 0, 0, .2),
+      15px -15px 10px rgb(255, 255, 255),
+      20px -20px 0 rgba(0, 0, 0, .2),
+      -5px 5px 10px rgba(0, 0, 0, .2),
+      -15px 15px 0 rgb(255, 255, 255),
+      35px -35px 10px rgba(0, 0, 0, .2);
   }
 }
 .card-list {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  margin: 0 auto 1rem;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 2rem;
+  padding: .5rem;
+  margin: 2rem auto 2rem;
   color: var(--color-black);
-  .card {
-    display: inline-block;
-    font-size: 12px;
-    width: 220px;
-    height: 160px;
-    border-radius: 18px;
-    padding: 1rem;
-    line-height: 1.3;
-    display: flex;
-    align-items: center;
-  }
 }
 .show-instructions {
   position: absolute;
   top: 2rem;
   right: 2rem;
   display: inline-block;
-  border-bottom: 2px solid #000;
+  span {
+    border-bottom: 2px solid #000;
+  }
+  .button {
+    display: none;
+  }
 }
 .instructions {
   opacity: 0;
   transform: translateY(-100%);
-  transition: all .3s ease;
+  transition: all .5s ease;
   
   &.visible {
     opacity: 1;
@@ -341,22 +353,29 @@ export default {
   right: 0;
   bottom: 0;
   overflow-y: scroll;
-  background: rgba(0, 0, 0, .5);
   padding: 2rem 2rem 6rem;
 
   &-wrapper {
     padding: 3rem 3rem 2rem;
     max-width: 700px;
     margin: 0 auto;
-    background: var(--color-white);
+    background: var(--color-orange);
     color: var(--color-black);
     position: relative;
     border-radius: 2rem;
     box-shadow: 0 0 20px rgba(0, 0, 0, .4);
   }
 }
+.instructions, .customize {
+  h2 {
+    padding-right: 3rem;
+  }
+}
 .end {
   text-align: center;
+  .end-content .content {
+    margin-bottom: 2rem;
+  }
 }
 .intro, .end {
   border: 4px dashed rgba(0, 0, 0, .1);
@@ -366,7 +385,7 @@ export default {
   max-width: 900px;
   margin: 0 auto;
 }
-.intro, .end, .card.current {
+.intro, .end {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -381,6 +400,23 @@ export default {
     width: 100%;
   }
 }
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: scroll;
+  background: rgba(0, 0, 0, .5);
+
+  display: none;
+  opacity: 0;
+  transition: opacity .6s ease;
+  &.visible {
+    display: block;
+    opacity: 1;
+  }
+}
 /*
 .button {
   background: var(--color-green);
@@ -391,21 +427,24 @@ export default {
   }
 }
 */
+@media (min-width: 800px) {
+  .card-nav {
+    .prev {
+      order: 1;
+      grid-column: 1 / span 1;
+    }
+    .next, .the-end {
+      order: 2;
+    }
+  }
+}
 @media (max-width: 800px) {
   .page.samtalekort {
     padding: 0;
   }
   .site-title {
-    margin-top: 6rem;
+    margin-top: 4rem;
     font-size: 1.4rem;
-  }
-  .card {
-    &.current {
-      margin: 2rem 0;
-      width: 100%;
-      padding: 2rem 1.4rem;
-      font-size: 1.3rem;
-    }
   }
   .card-nav {
     display: block;
@@ -416,10 +455,58 @@ export default {
   }
   .button {
     width: 100%;
+    &.close, &-info {
+      width: 3rem;
+      height: 3rem;
+    }
   }
   .intro, .end, .card-wrapper {
     min-height: 50vh;
     width: 100%;
+  }
+  .show-instructions {
+    position: absolute;
+    top: 0;
+    right: 0;
+    span {
+      display: none;
+    }
+    .button {
+      display: block;
+    }
+  }
+  .instructions {
+    padding: 1rem;
+    &-wrapper {
+      padding: 2rem;
+    }
+  }
+  .customize {
+    padding: 1rem;
+    &-wrapper {
+      padding: 2rem 1.5rem;
+      display: block;
+    }
+
+    h3 {
+      margin: 2.4rem 0 1rem;
+      font-size: 1.2rem;
+    }
+
+    &-open {
+      position: static;
+      box-shadow: none;
+      background: transparent;
+      width: 100%;
+      .button {
+        width: 100%;
+        padding: .75rem 1rem;
+        transform: none;
+      }
+    }
+  }
+  .card-list {
+    grid-template-columns: 1fr;
   }
 }
 </style>

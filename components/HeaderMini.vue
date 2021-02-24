@@ -1,6 +1,6 @@
 <template>
   <header class="site-header">
-    <div class="logo">
+    <div class="header-logo">
       <a href="/"><Logo /></a>
     </div>
   </header>
@@ -44,6 +44,13 @@ export default {
 @media (max-width: $media-s) {
   .site-header {
     display: block;
+    padding: 1rem;
+  }
+  .header-logo {
+    width: 50%;
+    a, .logo {
+      width: 100%;
+    }
   }
 }
 </style>
