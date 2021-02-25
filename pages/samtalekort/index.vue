@@ -2,6 +2,12 @@
   <main class="site-main">
     <h1 class="site-title">Samtalekort</h1>
 
+    Kategorier:<br>
+    {{ allCategories }}
+    <br><br>
+    Kort:<br>
+    {{ allCards }}
+
     <div class="read-more show-instructions">
       <span @click="toggle('instructions')">Hvordan bruke kortene</span>
       <button class="button button-info" @click="toggle('instructions')" aria-label="Instruksjoner"></button>
@@ -11,23 +17,23 @@
       <div class="intro" v-if="cardNumber === -1">
         <div class="intro-content">
           <div class="content" v-html="cardIndex.introText.content"></div>
-          <button class="button" @click="cardNumber++">Trekk et kort</button>
-          <button class="button secondary" @click="toggle('customize')">Tilpass kortstokken</button>
+          <button v-if="cardStack.length" class="button" @click="cardNumber++">Trekk et kort</button>
+          <button v-else class="button" @click="toggle('customize')">Tilpass kortstokken</button>
         </div>
       </div>
       <div class="card-wrapper" v-if="currentCard">
         <CurrentCard class="current-card" :card="currentCard" />
         <nav class="card-nav">
-          <button class="button next" @click="cardNumber++"  v-if="cardNumber < selectedCards.length-1">Neste kort</button>
-          <button class="button the-end" @click="cardNumber++"  v-if="cardNumber === selectedCards.length-1">Avslutt</button>
+          <button class="button next" @click="cardNumber++"  v-if="cardNumber < cardStack.length-1">Neste kort</button>
+          <button class="button the-end" @click="cardNumber++"  v-if="cardNumber === cardStack.length-1">Avslutt</button>
           <button class="button prev disabled" disabled v-if="cardNumber <= 0">Forrige kort</button>
           <button class="button prev" @click="cardNumber--" v-if="cardNumber > 0">Forrige kort</button>
         </nav>
         <div class="card-counter">
-          {{cardNumber+1}} / {{ selectedCards.length }}
+          {{cardNumber+1}} / {{ cardStack.length }}
         </div>
       </div>
-      <div class="end" v-if="cardNumber === selectedCards.length">
+      <div class="end" v-if="cardNumber === cardStack.length">
         <div class="end-content">
           <div class="content" v-html="cardIndex.endText.content"></div>
           <button class="button" @click="cardNumber = -1">Start på nytt</button>
@@ -37,7 +43,7 @@
 
     <div class="customize-open">
       <button class="button" @click="toggle('customize')">Tilpass kortstokken</button>
-      <button class="button secondary" @click="alert('Stokker bunken!')">Stokk bunken</button>
+      <button class="button secondary" @click="shuffle(cardStack)">Stokk bunken</button>
     </div>
 
     <div class="overlay" id="overlay"></div>
@@ -47,18 +53,26 @@
         <h2>Tilpass kortstokken</h2>
         <div class="customize-options customize-category">
           <h3>Vis kort etter tema:</h3>
-          <FilterOption v-for="category in categories" :key="category.id" :option="category" class="category-option" checked />
+          <div v-for="category in allCategories" :key="category.id" @click="category.selected = !category.selected">
+            <FilterOption :option="category" class="category-option" :checked="category.selected" />
+          </div>
         </div>
         <div class="customize-options customize-type">
           <h3>Vis kort etter type:</h3>
-          <FilterOption v-for="type in cardTypes" :key="type.id" :option="type" class="type-option" checked />
+          <div v-for="type in cardTypes" :key="type.id" @click="type.selected = !type.selected">
+            <FilterOption :option="type" class="type-option" :checked="type.selected" />
+          </div>
         </div>
         <div class="cards">
           <h3>Velg hvilke kort som skal vises:</h3>
-          <div>Velg alle</div>
-          <div>Fjern markeringer</div>
+          <div class="card-list-select">
+            <span @click="selectAll()">Velg alle</span>
+            <span @click="deSelectAll()">Fjern markeringer</span>
+          </div>
           <div class="card-list">
-            <Card v-for="(card, index) in cards" :card="card" :key="`card-${index}`" checked/>
+            <div class="card-list-wrapper" v-for="card in allCards" :key="card.id" @click="card.selected = !card.selected">
+              <Card :card="card" :checked="card.selected" />
+            </div>
           </div>
         </div>
         <div class="customize-done">
@@ -103,14 +117,18 @@ export default {
   data() {
     return {
       cardNumber: -1,
+      allCards: null,
+      allCategories: null,
       cardTypes: [
         {
           id: 'assertions',
-          title: 'Påstander'
+          title: 'Påstander',
+          selected: true
         },
         {
           id: 'questions',
-          title: 'Refleksjonsspørsmål'
+          title: 'Refleksjonsspørsmål',
+          selected: true
         }
       ]
     }
@@ -119,30 +137,99 @@ export default {
     currentCard() {
       if (this.cardNumber === -1) {
         return false
-      } else if (this.cardNumber === this.selectedCards.length) {
+      } else if (this.cardNumber === this.cardStack.length) {
         return false
       } else {
-        return this.selectedCards[this.cardNumber]
+        return this.cardStack[this.cardNumber]
       }
     },
     nextCard() {
       if (this.cardNumber === -2) {
         return false
-      } else if (this.cardNumber === this.selectedCards.length-1) {
+      } else if (this.cardNumber === this.cardStack.length-1) {
         return false
       } else {
-        return this.selectedCards[this.cardNumber+1]
+        return this.cardStack[this.cardNumber+1]
       }
     },
     selectedCards() {
+      /*const cards = this.allCards;
+      const categories = this.allCategories;
+      const filteredCardsByCategory = [];
+      const filteredCardsByType = [];
+      const filteredCards = [];
+
+      // check if cards match selected categories
+      for (let i = 0; i < cards.length; i++) {
+        if (cards[i].category.some(category => {
+            return 'Likestilling og mangfold' === category.title
+          })) {
+          filteredCardsByCategory.push(cards[i])
+        }
+      }
+
+      // check if cards match selected type
+      for (let i = 0; i < cards.length; i++) {
+        if (cards[i].category.some(category => {
+            return 'Likestilling og mangfold' === category.title
+          })) {
+          filteredCardsByType.push(cards[i])
+        }
+      }
+
+      // check if card is selected
+      for (let i = 0; i < cards.length; i++) {
+        if (cards[i].selected === true) {
+          filteredCards.push(cards[i])
+        }
+      }
+
+      return filteredCards*/
       return this.cards
+    },
+    cardStack() {
+      return this.shuffle(this.selectedCards)
     }
   },
   methods: {
     toggle: function(id) {
       document.getElementById(id).classList.toggle('visible')
       document.getElementById('overlay').classList.toggle('visible')
+    },
+    shuffle(cards) {
+      return cards.sort(() => 0.5 - Math.random())
+    },
+    selectAll() {
+      alert('selecting all')
+    },
+    deSelectAll() {
+      alert('deselecting all')
+    },
+    updateData(item, id) {
+      if (item === 'category') {
+        for (let i = 0; i < this.allCategories.length; i++) {
+          if (this.allCategories[i].id === id) {
+            this.allCategories[i].selected = !this.allCategories[i].selected
+          }
+        }
+      }
+    },
+    addData() {
+      const cards = this.cards
+      for (let i = 0; i < cards.length; i++) {
+        cards[i].selected = true
+      }
+      this.allCards = cards
+
+      const categories = this.categories
+      for (let i = 0; i < categories.length; i++) {
+        categories[i].selected = true
+      }
+      this.allCategories = categories
     }
+  },
+  mounted() {
+    this.addData()
   },
   head () {
     return {
@@ -179,6 +266,7 @@ export default {
     query {
       cards: entries(section:cards) {
     		... on Cards {
+          id
           title
           cardText {
             content
@@ -319,12 +407,37 @@ export default {
   }
 }
 .card-list {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-gap: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  grid-gap: 5%;
   padding: .5rem;
   margin: 2rem auto 2rem;
   color: var(--color-black);
+
+  &-wrapper {
+    width: 30%;
+  }
+  @media (max-width: 900px) {
+    &-wrapper {
+      width: 47.5%;
+    }
+  }
+  @media (max-width: 500px) {
+    &-wrapper {
+      width: 100%;
+    }
+  }
+
+  &-select {
+    margin: 1rem 0;
+    font-size: 14px;
+    span {
+      display: inline-block;
+      margin-right: 1.5rem;
+      border-bottom: 2px solid #000;
+      cursor: pointer;
+    }
+  }
 }
 .show-instructions {
   position: absolute;
