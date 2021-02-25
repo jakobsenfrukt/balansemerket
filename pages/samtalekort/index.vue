@@ -2,12 +2,6 @@
   <main class="site-main">
     <h1 class="site-title">Samtalekort</h1>
 
-    Kategorier:<br>
-    {{ allCategories }}
-    <br><br>
-    Kort:<br>
-    {{ allCards }}
-
     <div class="read-more show-instructions">
       <span @click="toggle('instructions')">Hvordan bruke kortene</span>
       <button class="button button-info" @click="toggle('instructions')" aria-label="Instruksjoner"></button>
@@ -17,8 +11,7 @@
       <div class="intro" v-if="cardNumber === -1">
         <div class="intro-content">
           <div class="content" v-html="cardIndex.introText.content"></div>
-          <button v-if="cardStack.length" class="button" @click="cardNumber++">Trekk et kort</button>
-          <button v-else class="button" @click="toggle('customize')">Tilpass kortstokken</button>
+          <button class="button" @click="cardNumber++">Trekk et kort</button>
         </div>
       </div>
       <div class="card-wrapper" v-if="currentCard">
@@ -53,13 +46,13 @@
         <h2>Tilpass kortstokken</h2>
         <div class="customize-options customize-category">
           <h3>Vis kort etter tema:</h3>
-          <div v-for="category in allCategories" :key="category.id" @click="category.selected = !category.selected">
+          <div v-for="category in allCategories" :key="category.id" @click="() => { category.selected = !category.selected; filter(); $forceUpdate(); }">
             <FilterOption :option="category" class="category-option" :checked="category.selected" />
           </div>
         </div>
         <div class="customize-options customize-type">
           <h3>Vis kort etter type:</h3>
-          <div v-for="type in cardTypes" :key="type.id" @click="type.selected = !type.selected">
+          <div v-for="type in cardTypes" :key="type.id" @click="() => { type.selected = !type.selected; filter();}">
             <FilterOption :option="type" class="type-option" :checked="type.selected" />
           </div>
         </div>
@@ -70,7 +63,7 @@
             <span @click="deSelectAll()">Fjern markeringer</span>
           </div>
           <div class="card-list">
-            <div class="card-list-wrapper" v-for="card in allCards" :key="card.id" @click="card.selected = !card.selected">
+            <div class="card-list-wrapper" v-for="card in allCards" :key="card.id" @click="() => { card.selected = !card.selected; filter(); $forceUpdate(); }">
               <Card :card="card" :checked="card.selected" />
             </div>
           </div>
@@ -100,6 +93,7 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import gql from 'graphql-tag'
 import CurrentCard from '~/components/samtalekort/CurrentCard.vue'
 import FilterOption from '~/components/samtalekort/FilterOption.vue'
@@ -117,16 +111,18 @@ export default {
   data() {
     return {
       cardNumber: -1,
-      allCards: null,
-      allCategories: null,
+      selectedCategories: [],
+      selectedCards: [],
+      allCards: [],
+      allCategories: [],
       cardTypes: [
         {
-          id: 'assertions',
+          id: 'assertion',
           title: 'Påstander',
           selected: true
         },
         {
-          id: 'questions',
+          id: 'question',
           title: 'Refleksjonsspørsmål',
           selected: true
         }
@@ -152,41 +148,6 @@ export default {
         return this.cardStack[this.cardNumber+1]
       }
     },
-    selectedCards() {
-      /*const cards = this.allCards;
-      const categories = this.allCategories;
-      const filteredCardsByCategory = [];
-      const filteredCardsByType = [];
-      const filteredCards = [];
-
-      // check if cards match selected categories
-      for (let i = 0; i < cards.length; i++) {
-        if (cards[i].category.some(category => {
-            return 'Likestilling og mangfold' === category.title
-          })) {
-          filteredCardsByCategory.push(cards[i])
-        }
-      }
-
-      // check if cards match selected type
-      for (let i = 0; i < cards.length; i++) {
-        if (cards[i].category.some(category => {
-            return 'Likestilling og mangfold' === category.title
-          })) {
-          filteredCardsByType.push(cards[i])
-        }
-      }
-
-      // check if card is selected
-      for (let i = 0; i < cards.length; i++) {
-        if (cards[i].selected === true) {
-          filteredCards.push(cards[i])
-        }
-      }
-
-      return filteredCards*/
-      return this.cards
-    },
     cardStack() {
       return this.shuffle(this.selectedCards)
     }
@@ -197,7 +158,53 @@ export default {
       document.getElementById('overlay').classList.toggle('visible')
     },
     shuffle(cards) {
+      this.cardNumber = 0
       return cards.sort(() => 0.5 - Math.random())
+    },
+    filter() {
+      this.filterCategories();
+      this.filterCards();
+    },
+    filterCategories() {
+      const categories = this.allCategories;
+      const filteredCategories = [];
+      for (let i = 0; i < categories.length; i++) {
+        if (categories[i].selected === true) {
+          filteredCategories.push(categories[i])
+        }
+      }
+      this.selectedCategories = filteredCategories
+    },
+    filterCards() {
+      const cards = this.allCards;
+      const filteredCards = [];
+
+      // check if cards match selected categories
+      const filteredCardsByCategory = cards.filter(card => {
+        return this.selectedCategories.some(category => {
+          return category.title === card.category[0].title
+        })
+      })
+      
+      // check if cards match selected type
+      const selectedTypes = this.cardTypes.filter(type => {
+        return type.selected === true
+      })
+      const filteredCardsByType = filteredCardsByCategory.filter(card => {
+        return selectedTypes.some(type => {
+          console.log(type.id)
+          return type.id === card.cardType
+        })
+      })
+      
+      // check if card is selected
+      for (let i = 0; i < filteredCardsByType.length; i++) {
+        if (filteredCardsByType[i].selected === true) {
+          filteredCards.push(filteredCardsByType[i])
+        }
+      }
+
+      this.selectedCards = filteredCards
     },
     selectAll() {
       alert('selecting all')
@@ -218,14 +225,18 @@ export default {
       const cards = this.cards
       for (let i = 0; i < cards.length; i++) {
         cards[i].selected = true
+        //Vue.set(this.allCards, i, cards[i])
+        this.allCards.push(cards[i])
       }
-      this.allCards = cards
 
       const categories = this.categories
       for (let i = 0; i < categories.length; i++) {
         categories[i].selected = true
+        //Vue.set(this.allCategories, i, categories[i])
+        this.allCategories.push(categories[i])
       }
-      this.allCategories = categories
+
+      this.filter();
     }
   },
   mounted() {
@@ -271,7 +282,9 @@ export default {
           cardText {
             content
           }
+          cardType
           category {
+            id
             title
           }
           words {

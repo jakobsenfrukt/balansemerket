@@ -50,6 +50,7 @@ export default {
     width: 50%;
     a, .logo {
       width: 100%;
+      max-width: 10rem;
     }
   }
 }
