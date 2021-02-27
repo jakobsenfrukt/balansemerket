@@ -1,10 +1,13 @@
 <template>
   <main class="site-main">
     <h1 class="site-title">Samtalekort</h1>
+    <div class="background">
+      <img src="/images/snakk-transparent.png" />
+    </div>
 
     <div class="read-more show-instructions">
-      <span @click="toggle('instructions')">Hvordan bruke kortene</span>
-      <button class="button button-info" @click="toggle('instructions')" aria-label="Instruksjoner"></button>
+      <span @click="toggleModal('instructions')">Hvordan bruke kortene</span>
+      <button class="button button-info" @click="toggleModal('instructions')" aria-label="Instruksjoner"></button>
     </div>
 
     <section class="page samtalekort">
@@ -35,7 +38,7 @@
     </section>
 
     <div class="customize-open">
-      <button class="button" @click="toggle('customize')">Tilpass kortstokken</button>
+      <button class="button" @click="toggleModal('customize')">Tilpass kortstokken</button>
       <button class="button secondary" @click="shuffle(cardStack)">Stokk bunken</button>
     </div>
 
@@ -45,34 +48,41 @@
       <div class="customize-wrapper">
         <h2>Tilpass kortstokken</h2>
         <div class="customize-options customize-category">
-          <h3>Vis kort etter tema:</h3>
+          <h3>Vis kort etter tema</h3>
           <div v-for="category in allCategories" :key="category.id" @click="() => { category.selected = !category.selected; filter(); $forceUpdate(); }">
             <FilterOption :option="category" class="category-option" :checked="category.selected" />
           </div>
         </div>
         <div class="customize-options customize-type">
-          <h3>Vis kort etter type:</h3>
-          <div v-for="type in cardTypes" :key="type.id" @click="() => { type.selected = !type.selected; filter();}">
+          <h3>Vis kort etter type</h3>
+          <div v-for="type in cardTypes" :key="type.id" @click="() => { type.selected = !type.selected; filter(); $forceUpdate();}">
             <FilterOption :option="type" class="type-option" :checked="type.selected" />
           </div>
         </div>
-        <div class="cards">
-          <h3>Velg hvilke kort som skal vises:</h3>
-          <div class="card-list-select">
-            <span @click="selectAll()">Velg alle</span>
-            <span @click="deSelectAll()">Fjern markeringer</span>
-          </div>
-          <div class="card-list">
-            <div class="card-list-wrapper" v-for="card in allCards" :key="card.id" @click="() => { card.selected = !card.selected; filter(); $forceUpdate(); }">
-              <Card :card="card" :checked="card.selected" />
+        <div class="cards" id="customize-cards">
+          <h3 class="readmore" @click="toggle('customize-cards')">Velg hvilke enkeltkort som skal vises</h3>
+          <div class="card-lists">
+            <div class="card-list-category" v-for="(category,index) in cardsByCategory" :key="`category-card-list-${index}`">
+              <div class="card-list-header">
+                <h4>{{category[0].category[0].title}}</h4>
+                <div class="card-list-select">
+                  <span @click="selectAll(); $forceUpdate();">Velg alle</span>
+                  <span @click="deSelectAll(); $forceUpdate();">Fjern markeringer</span>
+                </div>
+              </div>
+              <div class="card-list">
+                <div class="card-list-wrapper" v-for="card in category" :key="card.id" @click="() => { card.selected = !card.selected; filter(); $forceUpdate(); }">
+                  <Card :card="card" :checked="card.selected" />
+                </div>
+              </div>
             </div>
           </div>
         </div>
         <div class="customize-done">
-          <button class="button" @click="toggle('customize')">Ferdig</button>
+          <button class="button" @click="toggleModal('customize')">Ferdig</button>
         </div>
         <div class="customize-close">
-          <button class="button close" @click="toggle('customize')" aria-label="Lukk"></button>
+          <button class="button button-close" @click="toggleModal('customize')" aria-label="Lukk"></button>
         </div>
       </div>
     </div>
@@ -81,10 +91,10 @@
       <div class="instructions-wrapper">
         <div class="content" v-html="cardIndex.body.content"></div>
         <div class="instructions-done">
-          <button class="button" @click="toggle('instructions')">Sett i gang</button>
+          <button class="button" @click="toggleModal('instructions')">Sett i gang</button>
         </div>
         <div class="instructions-close">
-          <button class="button close" @click="toggle('instructions')" aria-label="Lukk"></button>
+          <button class="button button-close" @click="toggleModal('instructions')" aria-label="Lukk"></button>
         </div>
       </div>
     </div>
@@ -150,15 +160,40 @@ export default {
     },
     cardStack() {
       return this.shuffle(this.selectedCards)
+    },
+    cardsByCategory() {
+      const cards = this.allCards
+      const cardsByCategory = [];
+
+      this.selectedCategories.forEach(category => {
+        const categoryArray = [];
+        cards.filter(card => {
+          if (category.title === card.category[0].title) {
+            categoryArray.push(card)
+          }
+        })
+        cardsByCategory.push(categoryArray)
+      })
+      /*
+      const filteredCardsByCategory = cards.filter(card => {
+        return this.selectedCategories.some(category => {
+          return category.title === card.category[0].title
+        })
+      })*/
+
+      return cardsByCategory
     }
   },
   methods: {
-    toggle: function(id) {
+    toggleModal: function(id) {
       document.getElementById(id).classList.toggle('visible')
       document.getElementById('overlay').classList.toggle('visible')
     },
+    toggle: function(id) {
+      document.getElementById(id).classList.toggle('visible')
+    },
     shuffle(cards) {
-      this.cardNumber = 0
+      this.cardNumber = -1
       return cards.sort(() => 0.5 - Math.random())
     },
     filter() {
@@ -192,7 +227,6 @@ export default {
       })
       const filteredCardsByType = filteredCardsByCategory.filter(card => {
         return selectedTypes.some(type => {
-          console.log(type.id)
           return type.id === card.cardType
         })
       })
@@ -205,21 +239,26 @@ export default {
       }
 
       this.selectedCards = filteredCards
-    },
-    selectAll() {
-      alert('selecting all')
-    },
-    deSelectAll() {
-      alert('deselecting all')
-    },
-    updateData(item, id) {
-      if (item === 'category') {
-        for (let i = 0; i < this.allCategories.length; i++) {
-          if (this.allCategories[i].id === id) {
-            this.allCategories[i].selected = !this.allCategories[i].selected
-          }
+
+      cards.forEach(card => {
+        if (filteredCards.includes(card)) {
+          card.selected = true
+        } else {
+          card.selected = false
         }
+      })
+    },
+    selectAll(category) {
+      for (let i = 0; i < this.allCards.length; i++) {
+        this.allCards[i].selected = true
       }
+      this.shuffle(this.selectedCards);
+    },
+    deSelectAll(category) {
+      for (let i = 0; i < this.allCards.length; i++) {
+        this.allCards[i].selected = false
+      }
+      this.shuffle(this.selectedCards);
     },
     addData() {
       const cards = this.cards
@@ -288,8 +327,13 @@ export default {
             title
           }
           words {
-            title
+            ... on DictionaryWord {
+              title
+              ingress
+              slug
+            }
           }
+          disclaimer
         }
       }
     }`,
@@ -308,8 +352,28 @@ export default {
 
 <style lang="scss" scoped>
 .site-main {
-  background: var(--color-yellow);
   padding-bottom: 2rem;
+  position: relative;
+}
+.background {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  
+  img {
+    width: 53%;
+    max-width: 800px;
+    position: absolute;
+    z-index: -1;
+    bottom: 0;
+    left: -10%;
+  }
+  @media (max-width: 800px) {
+    display: none;
+  }
 }
 .site-title {
   text-align: center;
@@ -321,7 +385,7 @@ export default {
 .intro {
   text-align: center;
   .content {
-    margin-bottom: 2rem;
+    margin-bottom: 3rem;
   }
 }
 .card-counter {
@@ -344,9 +408,6 @@ export default {
     }
   }
 }
-.read-more {
-  cursor: pointer;
-}
 .customize {
   opacity: 0;
   transform: translateY(-100%);
@@ -361,6 +422,7 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
+  z-index: 1002;
   overflow-y: scroll;
   padding: 2rem 2rem 6rem;
 
@@ -389,43 +451,84 @@ export default {
     display: block;
     margin: .8rem 0;
   }
-  .cards {
-    grid-column: span 3;
-    margin-top: 2rem;
-  }
   &-done {
     grid-column: span 2;
   }
 
   &-open {
     position: absolute;
-    bottom: 2rem;
-    right: 2rem;
-    background: var(--color-white);
-    border-radius: 12px;
+    bottom: 1rem;
+    right: 1rem;
+    z-index: 1000;
     .button {
       font-size: 16px;
       padding: .5rem .75rem;
       margin: .5rem 0;
       width: 10rem;
       transform: translateX(-15px);
+      background: var(--color-green);
+      color: var(--color-black);
     }
-    box-shadow:
-      5px -5px 0 rgba(0, 0, 0, .2),
-      15px -15px 10px rgb(255, 255, 255),
-      20px -20px 0 rgba(0, 0, 0, .2),
-      -5px 5px 10px rgba(0, 0, 0, .2),
-      -15px 15px 0 rgb(255, 255, 255),
-      35px -35px 10px rgba(0, 0, 0, .2);
+  }
+  .cards {
+    grid-column: span 3;
+    margin-top: 2rem;
+    border-top: 2px solid rgba(255, 255, 255, .2);
+    border-bottom: 2px solid rgba(255, 255, 255, .2);
+    .card-lists {
+      display: none;
+    }
+    .readmore {
+      cursor: pointer;
+      margin: 0 0 1rem;
+      max-width: none;
+      padding: .75rem 2rem 0 0;
+      position: relative;
+      &:after {
+        content: "▼";
+        position: absolute;
+        top: 50%;
+        right: 0;
+        transform: translateY(-25%);
+      }
+    }
+    &.visible {
+      .card-lists {
+        display: block;
+      }
+      .readmore {
+        &:after {
+          content: "▲";
+        }
+      }
+    }
   }
 }
+
 .card-list {
   display: flex;
   flex-wrap: wrap;
   grid-gap: 5%;
   padding: .5rem;
-  margin: 2rem auto 2rem;
+  margin: 2rem auto 0;
   color: var(--color-black);
+
+  &-category {
+    background: rgba(255, 255, 255,.2);
+    padding: 1rem;
+    border-radius: 1rem;
+    margin-bottom: 1rem;
+  }
+  &-header {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    h4 {
+      width: 80%;
+      text-align: left;
+      margin: 0;
+    }
+  }
 
   &-wrapper {
     width: 30%;
@@ -442,8 +545,9 @@ export default {
   }
 
   &-select {
-    margin: 1rem 0;
+    width: 100%;
     font-size: 14px;
+    margin-top: .5rem;
     span {
       display: inline-block;
       margin-right: 1.5rem;
@@ -456,7 +560,9 @@ export default {
   position: absolute;
   top: 2rem;
   right: 2rem;
+  z-index: 1001;
   display: inline-block;
+  cursor: pointer;
   span {
     border-bottom: 2px solid #000;
   }
@@ -478,6 +584,7 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
+  z-index: 1002;
   overflow-y: scroll;
   padding: 2rem 2rem 6rem;
 
@@ -500,11 +607,11 @@ export default {
 .end {
   text-align: center;
   .end-content .content {
-    margin-bottom: 2rem;
+    margin-bottom: 3rem;
   }
 }
 .intro, .end {
-  border: 4px dashed rgba(0, 0, 0, .1);
+  border: 4px dashed rgba(0, 0, 0, .05);
   border-radius: 30px;
   padding: 2rem;
   width: 100%;
@@ -532,6 +639,7 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
+  z-index: 1000;
   overflow-y: scroll;
   background: rgba(0, 0, 0, .5);
 
@@ -622,12 +730,17 @@ export default {
     &-open {
       position: static;
       box-shadow: none;
-      background: transparent;
+      display: flex;
+      justify-content: space-between;
       width: 100%;
+      max-width: 400px;
+      margin: 0 auto;
+
       .button {
-        width: 100%;
-        padding: .75rem 1rem;
+        padding: 1rem 1.2rem;
         transform: none;
+        width: 48%;
+        font-size: 12px;
       }
     }
   }

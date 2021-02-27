@@ -1,18 +1,19 @@
 <template>
   <footer class="site-footer">
-    Utviklet av
-    <a href="https://balansekunstprosjektet.no/" target="_blank" class="bklogo"><BKLogo invert /></a>
-    i samarbeid med
+    <div class="balansekunst">
+      <h2>Utviklet av</h2>
+      <a href="https://balansekunstprosjektet.no/" target="_blank" class="bklogo"><BKLogo invert /></a>
+    </div>
     <div class="friends">
-      <div v-for="(partner, index) in cardIndex.partners" :key="index" class="friend">
-        <a :href="partner.websiteUrl" target="_blank">
-          <img :src="partner.logo[0].thumb" :alt="partner.logo[0].title" />
-        </a>
+      <h2>i samarbeid med</h2>
+      <div class="friend-list">
+        <div v-for="(partner, index) in cardIndex.partners" :key="index" class="friend">
+          <a :href="partner.websiteUrl" target="_blank">
+            {{partner.partnerName}}
+          </a>
+        </div>
       </div>
     </div>
-    <a class="to-top" href="#">
-      Til toppen
-    </a>
   </footer>
 </template>
 
@@ -54,36 +55,37 @@ export default {
   padding: 2rem;
   background: $color-text;
   color: $color-background;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+h2 {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-align: left;
+  font-size: 1.2rem;
+  width: 100%;
+  margin: 0 0 1rem;
 }
 .friends {
+  grid-column: span 2;
+}
+.friend-list {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  margin: 2rem auto;
+  grid-template-columns: repeat(2, 1fr);
 
   .friend {
-    padding-right: 3rem;
-
-    h3, p {
-      margin: 0 0 .5rem;
-    }
-
-    h3 {
-      font-weight: normal;
-      font-size: 1em;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
     a {
+      font-size: 1rem;
       color: inherit;
-      text-decoration: none;
       display: inline-block;
-      border-bottom: 2px solid $color-text;
-      line-height: 1;
+      text-decoration: none;
+      margin-bottom: .5rem;
+      border-bottom: 1px solid var(--color-white);
+      line-height: 1.2;
       transition: all .2s ease-in-out;
       &:hover {
-        color: $color-red;
-        border-color: $color-red;
+        color: var(--color-green);
+        border-color: var(--color-green);
       }
     }
   }
@@ -95,16 +97,18 @@ export default {
   line-height: 1;
   border-bottom: 2px solid $color-black;
 }
-@media (max-width: $width-s) {
+@media (max-width: 1000px) {
+  .friend-list {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 800px) {
   .site-footer {
     padding-bottom: 5rem;
+    grid-template-columns: 1fr;
   }
-  .columns {
-    div {
-      &:nth-child(1), &:nth-child(2), &:nth-child(3) {
-        margin-left: 0;
-      }
-    }
+  .friend-list {
+    grid-template-columns: 1fr;
   }
 }
 .bklogo {

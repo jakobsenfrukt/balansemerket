@@ -1,8 +1,15 @@
 <template>
   <div class="card current">
     <div class="content" v-html="card.cardText.content"></div>
-    <div class="dictionary-word" v-if="card.words.length">
-      Hva betyr <a href="#" target="_blank" class="word">{{card.words[0].title}}</a>?
+    <div v-if="card.disclaimer" class="disclaimer">{{ card.disclaimer }}</div>
+    <div class="show-word" v-if="card.words.length">
+      <button class="button button-question" @click="showWord = !showWord" :aria-label="`Hva betyr ${card.words[0].title}`"></button>
+    </div>
+    <div class="word" :class="{visible: showWord}" v-if="card.words.length">
+      <h2>{{card.words[0].title}}</h2>
+      <p class="word-definition">{{card.words[0].ingress}}</p>
+      <a :href="`/ordliste/${card.words[0].slug}`" target="_blank">Les mer i ordlisten</a>
+      <button class="button button-close" @click="showWord = !showWord" aria-label="Lukk"></button>
     </div>
   </div>
 </template>
@@ -11,6 +18,11 @@
 export default {
   props: {
     card: Object
+  },
+  data() {
+    return {
+      showWord: false
+    }
   }
 }
 </script>
@@ -31,10 +43,30 @@ export default {
   align-items: center;
   justify-content: center;
   min-height: 50vh;
-  font-size: 2rem;
   padding: 4rem;
 }
-.dictionary-word {
+.content {
+  font-size: 2rem;
+}
+.disclaimer {
+  font-size: 14px;
+  font-style: italic;
+  position: absolute;
+  bottom: 2rem;
+  left: 4rem;
+  right: 4rem;
+}
+.button-question {
+  width: 2rem;
+  height: 2rem;
+  position: static;
+  background-color: var(--color-darkgreen);
+}
+.button-close {
+  width: 2rem;
+  height: 2rem;
+}
+.show-word {
   font-size: 16px;
   color: var(--color-green);
   position: absolute;
@@ -46,13 +78,58 @@ export default {
     text-decoration: underline;
   }
 }
+.word {
+  position: absolute;
+  bottom: 1rem;
+  right: -1rem;
+  background: var(--color-green);
+  box-shadow: 0 0 10px rgba(0, 0, 0, .6);
+  border-radius: 1rem;
+  padding: 1rem 1.5rem 1.25rem;
+  width: 400px;
+  max-width: 100%;
+  text-align: left;
+
+  display: none;
+  &.visible {
+    display: block;
+  }
+
+  h2 {
+    font-size: 1.2rem;
+    margin: .25rem 0 1rem;
+    text-align: left;
+  }
+
+  p {
+    margin: 0 0 1rem;
+  }
+}
 @media (max-width: 800px) {
   .card {
     margin: 2rem 0;
     width: 100%;
     padding: 2rem 1.5rem;
-    font-size: 1rem;
     min-height: 45vh;
+    .content {
+      font-size: 1.2rem;
+    }
+    .disclaimer {
+      font-size: 10px;
+      line-height: 1;
+      bottom: 1rem;
+      left: 1rem;
+      right: 1rem;
+    }
+    .show-word {
+      bottom: auto;
+      top: 1rem;
+      right: 1rem;
+    }
+    .word {
+      bottom: auto;
+      top: 1rem;
+    }
   }
 }
 </style>

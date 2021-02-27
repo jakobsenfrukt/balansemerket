@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="card-layout">
     <HeaderMini />
     <nuxt />
     <div v-html="script"></div>
@@ -36,3 +36,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.card-layout {
+  background: var(--color-yellow);
+}
+</style>

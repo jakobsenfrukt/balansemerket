@@ -1,7 +1,9 @@
 <template>
   <nav class="dictionary-nav">
     <ul>
-      <li class="heading">Begreper</li>
+      <li class="heading">
+         <a href="/ordliste">Alle begreper</a>
+      </li>
       <li v-for="(word, index) in dictionary" :key="index">
         <a :href="`/ordliste/${word.slug}`">{{ word.title }}</a>
       </li>
@@ -24,6 +26,7 @@ export default {
     		... on DictionaryWord {
           title
           ingress
+          slug
         }
       }
     }`
