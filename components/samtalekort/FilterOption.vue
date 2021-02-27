@@ -1,6 +1,6 @@
 <template>
-  <div class="filter-option" @click="checked = !checked" :class="{checked: checked}">
-    <input class="checkbox" type="checkbox" :id="option.id" :name="option.id" :aria-label="option.title" checked />
+  <div class="filter-option" :class="{checked: checked}">
+    <input class="checkbox" type="checkbox" :id="option.id" :name="option.id" :aria-label="option.title" :checked="checked" />
     <div class="checkmark"></div>
     <label :for="option.id">{{ option.title }}</label>
     <span>{{ option.title }}</span>

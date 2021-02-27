@@ -85,6 +85,11 @@ h4 {
 
 p {
   margin: 0 auto 1rem;
+
+  &.lead {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+  }
 }
 
 ul {
@@ -245,7 +250,7 @@ img.main-illustration {
 .button {
   display: block;
   width: 80%;
-  max-width: 500px;
+  max-width: 400px;
   background: #000;
   color: #fff;
   font-family: inherit;
@@ -276,13 +281,15 @@ img.main-illustration {
     }
   }
   &.disabled {
-    opacity: .3;
+    background: #666;
+    color: #ddd;
+    opacity: .96;
     cursor: default;
     &:hover {
       transform: none;
     }
   }
-  &.close, &-info {
+  &-close, &-info, &-question {
     width: 3rem;
     height: 3rem;
     padding: 0;
@@ -291,13 +298,19 @@ img.main-illustration {
     top: 1rem;
     right: 1rem;
   }
-  &.close {
+  &-close {
     background-image: url('/graphics/close.svg');
     background-size: 36%;
     background-position: center;
     background-repeat: no-repeat;
   }
   &-info {
+    background-image: url('/graphics/info.svg');
+    background-size: 36%;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  &-question {
     background-image: url('/graphics/question.svg');
     background-size: 36%;
     background-position: center;
@@ -312,4 +325,5 @@ img.main-illustration {
 .card p {
   margin: 0 auto;
   max-width: none;
+  word-wrap: break-word;
 }

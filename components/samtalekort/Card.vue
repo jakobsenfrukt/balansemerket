@@ -1,5 +1,5 @@
 <template>
-  <div class="card" @click="checked = !checked" :class="{checked: checked}">
+  <div class="card" :class="{checked: checked}">
     <div class="content" v-html="card.cardText.content"></div>
     <div class="checkmark"></div>
   </div>
@@ -16,12 +16,12 @@ export default {
 
 <style lang="scss" scoped>
 .card {
-  display: inline-block;
   font-size: 12px;
   width: 100%;
   min-height: 180px;
   border-radius: 18px;
   padding: 1rem;
+  margin-bottom: 2rem;
   line-height: 1.3;
   display: flex;
   align-items: center;
@@ -36,6 +36,12 @@ export default {
 
   &:hover {
     transform: scale(1.05);
+  }
+  .content, p {
+    width: 100%;
+    max-width: 100%;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
   }
 }
 .checkmark {

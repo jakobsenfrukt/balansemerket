@@ -101,6 +101,11 @@ export default {
               slug
             }
           }
+          dictionary: entries(section:dictionary) {
+            ... on DictionaryWord {
+              slug
+            }
+          }
         }`
       }
       // For single execution operations, a Promise can be use
@@ -108,7 +113,8 @@ export default {
       .then(result => { 
         var tiltakArray = result.data.tiltak.map(tiltak => `/tiltak/${tiltak.slug}/`)
         var ressursArray = result.data.ressurser.map(ressurser => `/ressurser/${ressurser.slug}/`)
-        return tiltakArray.concat(ressursArray)
+        var wordArray = result.data.dictionary.map(dictionary => `/ordliste/${dictionary.slug}/`)
+        return tiltakArray.concat(ressursArray, wordArray)
       })
       .catch(error => console.log(`received error ${error}`))
     }
