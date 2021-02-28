@@ -49,30 +49,30 @@
         <h2>Tilpass kortstokken</h2>
         <div class="customize-options customize-category">
           <h3>Vis kort etter tema</h3>
-          <div v-for="category in allCategories" :key="category.id" @click="() => { category.selected = !category.selected; filter(); $forceUpdate(); }">
-            <FilterOption :option="category" class="category-option" :checked="category.selected" />
+          <div v-for="category in allCategories" :key="category.id" @click="() => { toggleCategory(category) }">
+            <FilterOption :option="category" class="category-option" :checked="isCategorySelected(category)" />
           </div>
         </div>
         <div class="customize-options customize-type">
           <h3>Vis kort etter type</h3>
-          <div v-for="type in cardTypes" :key="type.id" @click="() => { type.selected = !type.selected; filter(); $forceUpdate();}">
-            <FilterOption :option="type" class="type-option" :checked="type.selected" />
+          <div v-for="type in cardTypes" :key="type.id" @click="() => { toggleType(type) }">
+            <FilterOption :option="type" class="type-option" :checked="isTypeSelected(type)" />
           </div>
         </div>
         <div class="cards" id="customize-cards">
           <h3 class="readmore" @click="toggle('customize-cards')">Velg hvilke enkeltkort som skal vises</h3>
           <div class="card-lists">
-            <div class="card-list-category" v-for="(category,index) in cardsByCategory" :key="`category-card-list-${index}`">
+            <div class="card-list-category" v-for="(item, index) in selectableCardsByCategory()" :key="`category-card-list-${index}`">
               <div class="card-list-header">
-                <h4>{{category[0].category[0].title}}</h4>
+                <h4>{{item.category.title}}</h4>
                 <div class="card-list-select">
-                  <span @click="selectAll(); $forceUpdate();">Velg alle</span>
-                  <span @click="deSelectAll(); $forceUpdate();">Fjern markeringer</span>
+                  <span @click="selectAll(item.category); $forceUpdate();">Velg alle</span>
+                  <span @click="deSelectAll(item.category); $forceUpdate();">Fjern markeringer</span>
                 </div>
               </div>
               <div class="card-list">
-                <div class="card-list-wrapper" v-for="card in category" :key="card.id" @click="() => { card.selected = !card.selected; filter(); $forceUpdate(); }">
-                  <Card :card="card" :checked="card.selected" />
+                <div class="card-list-wrapper" v-for="card in item.cards" :key="card.id" @click="() => { toggleCard(card) }">
+                  <Card :card="card" :checked="isCardSelected(card)" />
                 </div>
               </div>
             </div>
@@ -121,20 +121,19 @@ export default {
   data() {
     return {
       cardNumber: -1,
-      selectedCategories: [],
       selectedCards: [],
+      selectedCategories: [],
+      selectedTypes: [],
       allCards: [],
       allCategories: [],
       cardTypes: [
         {
           id: 'assertion',
           title: 'Påstander',
-          selected: true
         },
         {
           id: 'question',
           title: 'Refleksjonsspørsmål',
-          selected: true
         }
       ]
     }
@@ -159,30 +158,8 @@ export default {
       }
     },
     cardStack() {
-      return this.shuffle(this.selectedCards)
+      return this.shuffle(this.getSelectedCards())
     },
-    cardsByCategory() {
-      const cards = this.allCards
-      const cardsByCategory = [];
-
-      this.selectedCategories.forEach(category => {
-        const categoryArray = [];
-        cards.filter(card => {
-          if (category.title === card.category[0].title) {
-            categoryArray.push(card)
-          }
-        })
-        cardsByCategory.push(categoryArray)
-      })
-      /*
-      const filteredCardsByCategory = cards.filter(card => {
-        return this.selectedCategories.some(category => {
-          return category.title === card.category[0].title
-        })
-      })*/
-
-      return cardsByCategory
-    }
   },
   methods: {
     toggleModal: function(id) {
@@ -196,87 +173,145 @@ export default {
       this.cardNumber = -1
       return cards.sort(() => 0.5 - Math.random())
     },
-    filter() {
-      this.filterCategories();
-      this.filterCards();
-    },
-    filterCategories() {
-      const categories = this.allCategories;
-      const filteredCategories = [];
-      for (let i = 0; i < categories.length; i++) {
-        if (categories[i].selected === true) {
-          filteredCategories.push(categories[i])
-        }
+    toggleValue(arr, value) {
+      let index = arr.indexOf(value);
+      if (index > -1) {
+        arr.splice(index, 1);
+        return false
+      } else {
+        arr.push(value)
+        return true
       }
-      this.selectedCategories = filteredCategories
     },
-    filterCards() {
-      const cards = this.allCards;
-      const filteredCards = [];
-
-      // check if cards match selected categories
-      const filteredCardsByCategory = cards.filter(card => {
-        return this.selectedCategories.some(category => {
-          return category.title === card.category[0].title
-        })
+    removeAll(arr, values) {
+      values.forEach(value => {
+        if (arr.includes(value)) (
+          this.toggleValue(arr, value)
+        )
       })
-      
-      // check if cards match selected type
-      const selectedTypes = this.cardTypes.filter(type => {
-        return type.selected === true
-      })
-      const filteredCardsByType = filteredCardsByCategory.filter(card => {
-        return selectedTypes.some(type => {
-          return type.id === card.cardType
-        })
-      })
-      
-      // check if card is selected
-      for (let i = 0; i < filteredCardsByType.length; i++) {
-        if (filteredCardsByType[i].selected === true) {
-          filteredCards.push(filteredCardsByType[i])
-        }
+    },
+    toggleCategory(category) {
+      const added = this.toggleValue(this.selectedCategories, category.id)
+      const cardIds = this.getCardIdsInCategory(category.id)
+      if (added) {
+        cardIds.forEach(cardId => this.selectedCards.push(cardId))
+      } else {
+        this.removeAll(this.selectedCards, cardIds)
       }
-
-      this.selectedCards = filteredCards
-
-      cards.forEach(card => {
-        if (filteredCards.includes(card)) {
-          card.selected = true
-        } else {
-          card.selected = false
+      this.saveToLocalStorage()
+      this.$forceUpdate()
+    },
+    toggleType(type) {
+      const added = this.toggleValue(this.selectedTypes, type.id)
+      const cardIds = this.getCardIdsWithType(type.id)
+      if (added) {
+        cardIds.forEach(cardId => this.selectedCards.push(cardId))
+      } else {
+        this.removeAll(this.selectedCards, cardIds)
+      }
+      this.saveToLocalStorage()
+      this.$forceUpdate()
+    },
+    toggleCard(card) {
+      const added = this.toggleValue(this.selectedCards, card.id)
+      this.saveToLocalStorage()
+      this.$forceUpdate()
+    },
+    getSelectedCategories() {
+      return this.allCategories.filter(category => this.selectedCategories.includes(category.id))
+    },
+    getSelectedTypes() {
+      return this.cardTypes.filter(type => this.selectedTypes.includes(type.id))
+    },
+    getSelectedCards() {
+      return this.allCards.filter(card => this.selectedCards.includes(card.id))
+    },
+    getCardIdsInCategory(categoryId) {
+      return this.allCards.filter(card => card.category[0].id === categoryId).map(card => card.id)
+    },
+    getCardIdsWithType(typeId) {
+      return this.allCards.filter(card => card.cardType === typeId).map(card => card.id)
+    },
+    selectableCardsByCategory() {
+      return this.getSelectedCategories().map(category => {
+        const cardsInCategory = this.allCards.filter(card => (
+          category.id === card.category[0].id && this.selectedTypes.includes(card.cardType)
+        ))
+        return {
+          category: category,
+          cards: cardsInCategory,
         }
       })
+    },
+    isCategorySelected(category) {
+      return this.getSelectedCategories().includes(category)
+    },
+    isTypeSelected(type) {
+      return this.getSelectedTypes().includes(type)
+    },
+    isCardSelected(card) {
+      return this.getSelectedCards().some(haystack => haystack.id === card.id)
     },
     selectAll(category) {
-      for (let i = 0; i < this.allCards.length; i++) {
-        this.allCards[i].selected = true
-      }
-      this.shuffle(this.selectedCards);
+      const cardIds = this.getCardIdsInCategory(category.id)
+      cardIds.forEach(cardId => {
+        if (!this.selectedCards.includes(cardId)) {
+          this.selectedCards.push(cardId)
+        }
+      })
+      this.shuffle(this.selectedCards)
     },
     deSelectAll(category) {
-      for (let i = 0; i < this.allCards.length; i++) {
-        this.allCards[i].selected = false
-      }
-      this.shuffle(this.selectedCards);
+      const cardIds = this.getCardIdsInCategory(category.id)
+      this.removeAll(this.selectedCards, cardIds)
+      this.shuffle(this.selectedCards)
     },
     addData() {
-      const cards = this.cards
-      for (let i = 0; i < cards.length; i++) {
-        cards[i].selected = true
-        //Vue.set(this.allCards, i, cards[i])
-        this.allCards.push(cards[i])
-      }
+      this.cards.forEach((card) => {
+        this.allCards.push(card)
+      })
 
-      const categories = this.categories
-      for (let i = 0; i < categories.length; i++) {
-        categories[i].selected = true
-        //Vue.set(this.allCategories, i, categories[i])
-        this.allCategories.push(categories[i])
-      }
+      this.categories.forEach((category) => {
+        this.allCategories.push(category)
+      })
 
-      this.filter();
-    }
+      try {
+        if (localStorage.selectedCards && JSON.parse(localStorage.selectedCards).length) {
+          this.loadFromLocalStorage()
+        } else {
+          this.setDefaultState()
+        }
+      } catch (error) {
+        console.error(error)
+        this.setDefaultState()
+      }
+      this.$forceUpdate()
+    },
+    setDefaultState() {
+      this.selectedCards = this.allCards.map(card => card.id)
+      this.selectedCategories = this.allCategories.map(category => category.id)
+      this.selectedTypes = this.cardTypes.map(type => type.id)
+      this.saveToLocalStorage()
+    },
+    saveToLocalStorage() {
+      localStorage.selectedCards = JSON.stringify(this.selectedCards)
+      localStorage.selectedCategories = JSON.stringify(this.selectedCategories)
+      localStorage.selectedTypes = JSON.stringify(this.selectedTypes)
+    },
+    loadFromLocalStorage() {
+      const validCardIds = this.allCards.map(card => card.id)
+      const validCategoryIds = this.allCategories.map(category => category.id)
+      const validTypeIds = this.cardTypes.map(type => type.id)
+      this.selectedCards = JSON.parse(localStorage.selectedCards).filter(
+        cardId => validCardIds.includes(cardId)
+      )
+      this.selectedCategories = JSON.parse(localStorage.selectedCategories).filter(
+        categoryId => validCategoryIds.includes(categoryId)
+      )
+      this.selectedTypes = JSON.parse(localStorage.selectedTypes).filter(
+        typeId => validTypeIds.includes(typeId)
+      )
+    },
   },
   mounted() {
     this.addData()
