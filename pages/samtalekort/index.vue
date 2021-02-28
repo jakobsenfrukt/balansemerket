@@ -338,9 +338,29 @@ export default {
       )
       this.$forceUpdate()
     },
+    keyDownHandler(event) {
+      if (event.key === "ArrowLeft") {
+        if (this.cardNumber > 0) {
+          this.cardNumber--
+          event.preventDefault()
+        }
+        return
+      }
+      if (event.key === "ArrowRight") {
+        if (this.cardNumber < this.cardStack.length) {
+          this.cardNumber++
+          event.preventDefault()
+        }
+        return
+      }
+    }
   },
   mounted() {
     this.addData()
+    window.addEventListener("keydown", this.keyDownHandler)
+  },
+  destroyed() {
+    window.removeEventListener("keydown", this.keyDownHandler)
   },
   head () {
     return {
