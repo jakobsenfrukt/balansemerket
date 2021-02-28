@@ -197,11 +197,24 @@ export default {
         )
       })
     },
+    uniq(arr) {
+      return [...new Set(arr)];
+    },
     toggleCategory(category) {
+      this.selectedCards = this.uniq(this.selectedCards)
+      this.selectedCategories = this.uniq(this.selectedCategories)
       const added = this.toggleValue(this.selectedCategories, category.id)
-      const cardIds = this.getCardIdsInCategory(category.id)
+      const cardIds = this.getCardsInCategory(category.id).filter(
+        card => this.selectedTypes.some(
+          typeId => (typeId === card.cardType)
+        )
+      ).map(card => card.id)
       if (added) {
-        cardIds.forEach(cardId => this.selectedCards.push(cardId))
+        cardIds.filter(
+          cardId => !this.selectedCards.includes(cardId)
+        ).forEach(
+          cardId => this.selectedCards.push(cardId)
+        )
       } else {
         this.removeAll(this.selectedCards, cardIds)
       }
@@ -209,10 +222,19 @@ export default {
       this.$forceUpdate()
     },
     toggleType(type) {
+      this.selectedTypes = this.uniq(this.selectedTypes)
       const added = this.toggleValue(this.selectedTypes, type.id)
-      const cardIds = this.getCardIdsWithType(type.id)
+      const cardIds = this.getCardsWithType(type.id).filter(
+        card => this.selectedCategories.some(
+          categoryId => (categoryId === card.category[0].id)
+        )
+      ).map(card => card.id)
       if (added) {
-        cardIds.forEach(cardId => this.selectedCards.push(cardId))
+        cardIds.filter(
+          cardId => !this.selectedCards.includes(cardId)
+        ).forEach(
+          cardId => this.selectedCards.push(cardId)
+        )
       } else {
         this.removeAll(this.selectedCards, cardIds)
       }
@@ -220,6 +242,7 @@ export default {
       this.$forceUpdate()
     },
     toggleCard(card) {
+      this.selectedCards = this.uniq(this.selectedCards)
       const added = this.toggleValue(this.selectedCards, card.id)
       this.saveToLocalStorage()
       this.$forceUpdate()
@@ -233,11 +256,11 @@ export default {
     getSelectedCards() {
       return this.allCards.filter(card => this.selectedCards.includes(card.id))
     },
-    getCardIdsInCategory(categoryId) {
-      return this.allCards.filter(card => card.category[0].id === categoryId).map(card => card.id)
+    getCardsInCategory(categoryId) {
+      return this.allCards.filter(card => card.category[0].id === categoryId)
     },
-    getCardIdsWithType(typeId) {
-      return this.allCards.filter(card => card.cardType === typeId).map(card => card.id)
+    getCardsWithType(typeId) {
+      return this.allCards.filter(card => card.cardType === typeId)
     },
     selectableCardsByCategory() {
       return this.getSelectedCategories().map(category => {
@@ -260,8 +283,8 @@ export default {
       return this.getSelectedCards().some(haystack => haystack.id === card.id)
     },
     selectAll(category) {
-      const cardIds = this.getCardIdsInCategory(category.id)
-      cardIds.forEach(cardId => {
+      const cardIds = this.getCardsInCategory(category.id).map(card => card.id)
+      cards.forEach(cardId => {
         if (!this.selectedCards.includes(cardId)) {
           this.selectedCards.push(cardId)
         }
@@ -269,18 +292,13 @@ export default {
       this.shuffle(this.selectedCards)
     },
     deSelectAll(category) {
-      const cardIds = this.getCardIdsInCategory(category.id)
+      const cardIds = this.getCardsInCategory(category.id).map(card => card.id)
       this.removeAll(this.selectedCards, cardIds)
       this.shuffle(this.selectedCards)
     },
     addData() {
-      this.cards.forEach((card) => {
-        this.allCards.push(card)
-      })
-
-      this.categories.forEach((category) => {
-        this.allCategories.push(category)
-      })
+      this.allCards = this.cards
+      this.allCategories = this.categories
 
       try {
         if (localStorage.selectedCards && JSON.parse(localStorage.selectedCards).length) {
@@ -292,13 +310,13 @@ export default {
         console.error(error)
         this.setDefaultState()
       }
-      this.$forceUpdate()
     },
     setDefaultState() {
       this.selectedCards = this.allCards.map(card => card.id)
       this.selectedCategories = this.allCategories.map(category => category.id)
       this.selectedTypes = this.cardTypes.map(type => type.id)
       this.saveToLocalStorage()
+      this.$forceUpdate()
     },
     saveToLocalStorage() {
       localStorage.selectedCards = JSON.stringify(this.selectedCards)
@@ -318,6 +336,7 @@ export default {
       this.selectedTypes = JSON.parse(localStorage.selectedTypes).filter(
         typeId => validTypeIds.includes(typeId)
       )
+      this.$forceUpdate()
     },
   },
   mounted() {
