@@ -6,7 +6,7 @@
     </div>
 
     <div class="read-more show-instructions">
-      <span @click="toggleModal('instructions')">Hvordan bruke kortene</span>
+      <button class="button-textonly" @click="toggleModal('instructions')">Hvordan bruke kortene</button>
       <button class="button button-info" @click="toggleModal('instructions')" aria-label="Instruksjoner"></button>
     </div>
 
@@ -40,6 +40,7 @@
     <div class="customize-open">
       <button class="button" @click="toggleModal('customize')">Tilpass kortstokken</button>
       <button class="button secondary" @click="shuffle(cardStack)">Stokk bunken</button>
+      <span class="cards-chosen">{{cardStack.length}} av {{allCards.length}} kort valgt</span>
     </div>
 
     <div class="overlay" id="overlay"></div>
@@ -47,33 +48,39 @@
     <div class="customize" id="customize">
       <div class="customize-wrapper">
         <h2>Tilpass kortstokken</h2>
+        <div class="customize-info">
+          <button class="button-textonly" @click="setDefaultState()">Nullstill</button>
+          <span class="cards-chosen">{{cardStack.length}} av {{allCards.length}} kort valgt</span>
+        </div>
         <div class="customize-options customize-category">
           <h3>Vis kort etter tema</h3>
-          <div v-for="category in allCategories" :key="category.id" @click="() => { toggleCategory(category) }">
+          <button v-for="category in allCategories" :key="category.id" @click="() => { toggleCategory(category) }">
             <FilterOption :option="category" class="category-option" :checked="isCategorySelected(category)" />
-          </div>
+          </button>
         </div>
         <div class="customize-options customize-type">
           <h3>Vis kort etter type</h3>
-          <div v-for="type in cardTypes" :key="type.id" @click="() => { toggleType(type) }">
+          <button v-for="type in cardTypes" :key="type.id" @click="() => { toggleType(type) }">
             <FilterOption :option="type" class="type-option" :checked="isTypeSelected(type)" />
-          </div>
+          </button>
         </div>
         <div class="cards" id="customize-cards">
-          <h3 class="readmore" @click="toggle('customize-cards')">Velg hvilke enkeltkort som skal vises</h3>
+          <button @click="toggle('customize-cards')">
+            <h3 class="readmore">Velg hvilke enkeltkort som skal vises</h3>
+          </button>
           <div class="card-lists">
             <div class="card-list-category" v-for="(item, index) in selectableCardsByCategory()" :key="`category-card-list-${index}`">
               <div class="card-list-header">
                 <h4>{{item.category.title}}</h4>
                 <div class="card-list-select">
-                  <span @click="selectAll(item.category); $forceUpdate();">Velg alle</span>
-                  <span @click="deSelectAll(item.category); $forceUpdate();">Fjern markeringer</span>
+                  <button class="button-textonly" @click="selectAll(item.category); $forceUpdate();">Velg alle</button>
+                  <button class="button-textonly" @click="deSelectAll(item.category); $forceUpdate();">Fjern markeringer</button>
                 </div>
               </div>
               <div class="card-list">
-                <div class="card-list-wrapper" v-for="card in item.cards" :key="card.id" @click="() => { toggleCard(card) }">
+                <button class="card-list-wrapper" v-for="card in item.cards" :key="card.id" @click="() => { toggleCard(card) }">
                   <Card :card="card" :checked="isCardSelected(card)" />
-                </div>
+                </button>
               </div>
             </div>
           </div>
@@ -415,7 +422,7 @@ export default {
   font-size: 1.8rem;
 }
 .page.samtalekort {
-  padding: 1rem 2rem;
+  padding: .5rem 2rem 1rem;
 }
 .intro {
   text-align: center;
@@ -475,16 +482,19 @@ export default {
   }
 
   h2 {
-    grid-column: span 3;
+    grid-column: span 2;
     text-align: left;
     width: 100%;
     max-width: none;
-    margin-bottom: 2rem;
+    margin-bottom: .5rem;
   }
   h3 {
     font-weight: 700;
     display: block;
     margin: .8rem 0;
+  }
+  h4 {
+    font-size: 1rem;
   }
   &-done {
     grid-column: span 2;
@@ -500,18 +510,41 @@ export default {
       padding: .5rem .75rem;
       margin: .5rem 0;
       width: 10rem;
-      transform: translateX(-15px);
       background: var(--color-green);
       color: var(--color-black);
     }
+    span {
+      font-size: 14px;
+      display: block;
+      width: 100%;
+      text-align: center;
+      padding: 0 .75rem;
+    }
+  }
+  &-options {
+    button {
+      width: 100%;
+    }
+  }
+  &-info {
+    display: block;
+    grid-column: span 2;
+    font-size: 14px;
+    margin-bottom: 1rem;
+    span {
+      margin-right: 1.5rem;
+    }
   }
   .cards {
-    grid-column: span 3;
+    grid-column: span 2;
     margin-top: 2rem;
     border-top: 2px solid rgba(255, 255, 255, .2);
     border-bottom: 2px solid rgba(255, 255, 255, .2);
     .card-lists {
       display: none;
+    }
+    > button {
+      width: 100%;
     }
     .readmore {
       cursor: pointer;
@@ -583,12 +616,6 @@ export default {
     width: 100%;
     font-size: 14px;
     margin-top: .5rem;
-    span {
-      display: inline-block;
-      margin-right: 1.5rem;
-      border-bottom: 2px solid #000;
-      cursor: pointer;
-    }
   }
 }
 .show-instructions {
@@ -598,8 +625,8 @@ export default {
   z-index: 1001;
   display: inline-block;
   cursor: pointer;
-  span {
-    border-bottom: 2px solid #000;
+  .button-textonly {
+    margin: 0;
   }
   .button {
     display: none;
@@ -625,7 +652,7 @@ export default {
 
   &-wrapper {
     padding: 3rem 3rem 2rem;
-    max-width: 700px;
+    max-width: 800px;
     margin: 0 auto;
     background: var(--color-orange);
     color: var(--color-black);
@@ -649,21 +676,15 @@ export default {
   border: 4px dashed rgba(0, 0, 0, .05);
   border-radius: 30px;
   padding: 2rem;
-  width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
-}
-.intro, .end {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 50vh;
 }
 .intro, .end, .card-wrapper {
   min-height: 70vh;
   width: 80%;
   max-width: 1000px;
-  margin: 2rem auto;
+  margin: 1rem auto 2rem;
   &-content {
     width: 100%;
   }
@@ -686,16 +707,6 @@ export default {
     opacity: 1;
   }
 }
-/*
-.button {
-  background: var(--color-green);
-  color: #000;
-
-  &.secondary {
-    background: #fff;
-  }
-}
-*/
 @media (min-width: 800px) {
   .card-nav {
     .prev {
@@ -724,7 +735,7 @@ export default {
   }
   .button {
     width: 100%;
-    &.close, &-info {
+    &-close, &-info {
       width: 3rem;
       height: 3rem;
     }
@@ -737,7 +748,7 @@ export default {
     position: absolute;
     top: 0;
     right: 0;
-    span {
+    .button-textonly {
       display: none;
     }
     .button {
@@ -766,6 +777,7 @@ export default {
       position: static;
       box-shadow: none;
       display: flex;
+      flex-wrap: wrap;
       justify-content: space-between;
       width: 100%;
       max-width: 400px;
@@ -775,6 +787,7 @@ export default {
         padding: 1rem 1.2rem;
         transform: none;
         width: 48%;
+        margin-bottom: 1rem;
         font-size: 12px;
       }
     }
