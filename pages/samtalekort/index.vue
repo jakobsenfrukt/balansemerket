@@ -282,8 +282,12 @@ export default {
       return this.getSelectedCards().some(haystack => haystack.id === card.id)
     },
     selectAll(category) {
-      const cardIds = this.getCardsInCategory(category.id).map(card => card.id)
-      cards.forEach(cardId => {
+      const cardIds = this.getCardsInCategory(category.id).filter(
+        card => this.selectedTypes.some(
+          typeId => (typeId === card.cardType)
+        )
+      ).map(card => card.id)
+      cardIds.forEach(cardId => {
         if (!this.selectedCards.includes(cardId)) {
           this.selectedCards.push(cardId)
         }
@@ -291,7 +295,11 @@ export default {
       this.shuffle(this.selectedCards)
     },
     deSelectAll(category) {
-      const cardIds = this.getCardsInCategory(category.id).map(card => card.id)
+      const cardIds = this.getCardsInCategory(category.id).filter(
+        card => this.selectedTypes.some(
+          typeId => (typeId === card.cardType)
+        )
+      ).map(card => card.id)
       this.removeAll(this.selectedCards, cardIds)
       this.shuffle(this.selectedCards)
     },
