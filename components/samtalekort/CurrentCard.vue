@@ -38,6 +38,7 @@ export default {
   text-align: center;
   margin: 1rem;
   position: relative;
+  z-index: 2000;
 
   display: flex;
   align-items: center;
