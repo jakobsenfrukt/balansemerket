@@ -120,8 +120,8 @@ img.main-illustration {
     line-height: 1;
     transition: all .2s ease-in-out;
     &:hover {
-      color: $color-red;
-      border-color: $color-red;
+      color: var(--color-pink);
+      border-color: var(--color-pink);
     }
   }
   ul, ol {
@@ -342,4 +342,11 @@ button {
   margin: 0 auto;
   max-width: none;
   word-wrap: break-word;
+}
+
+
+.page.ordliste {
+  p, ul, ol, h1, h2, h3, h4, h5, h6 {
+    margin-left: 0;
+  }
 }

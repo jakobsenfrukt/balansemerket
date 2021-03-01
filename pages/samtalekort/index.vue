@@ -1,6 +1,5 @@
 <template>
   <main class="site-main">
-    <h1 class="site-title">Samtalekort</h1>
     <div class="background">
       <img src="/images/snakk-transparent.png" />
     </div>
@@ -456,15 +455,17 @@ export default {
     display: none;
   }
 }
-.site-title {
-  text-align: center;
-  font-size: 1.8rem;
-}
 .page.samtalekort {
-  padding: .5rem 2rem 1rem;
+  padding: 3.6rem 2rem 1rem;
 }
 .intro {
   text-align: center;
+  text-shadow: 
+    1px 1px 1px var(--color-yellow),
+    1px -1px 1px var(--color-yellow),
+    -1px 1px 1px var(--color-yellow),
+    -1px -1px 1px var(--color-yellow),
+    0 0 5px var(--color-yellow);
   .content {
     margin-bottom: 3rem;
   }
@@ -541,12 +542,12 @@ export default {
 
   &-open {
     position: absolute;
-    bottom: 1rem;
-    right: 1rem;
+    bottom: 1.5rem;
+    right: 1.5rem;
     z-index: 1000;
     .button {
       font-size: 16px;
-      padding: .5rem .75rem;
+      padding: .6rem .8rem;
       margin: .5rem 0;
       width: 10rem;
       background: var(--color-green);
@@ -693,7 +694,7 @@ export default {
     padding: 3rem 3rem 2rem;
     max-width: 800px;
     margin: 0 auto;
-    background: var(--color-orange);
+    background: var(--color-green);
     color: var(--color-black);
     position: relative;
     border-radius: 2rem;
@@ -712,8 +713,6 @@ export default {
   }
 }
 .intro, .end {
-  border: 4px dashed rgba(0, 0, 0, .05);
-  border-radius: 30px;
   padding: 2rem;
   display: flex;
   align-items: center;
@@ -759,7 +758,7 @@ export default {
 }
 @media (max-width: 800px) {
   .page.samtalekort {
-    padding: 0;
+    padding: 3rem 0 0;
   }
   .site-title {
     margin-top: 4rem;

@@ -5,8 +5,7 @@
       {{ word.title }}
     </h1>
     <section class="page ordliste">
-      <p class="lead">{{ word.ingress }}</p>
-      <div v-html="word.body.content"></div>
+      <div class="content" v-html="word.body.content"></div>
       <DictionaryNav />
     </section>
   </main>
@@ -57,6 +56,7 @@ export default {
 
 <style lang="scss" scoped>
 .site-title {
+  margin-left: 300px;
   span {
     display: block;
     font-size: .8rem;
@@ -64,6 +64,26 @@ export default {
     text-transform: uppercase;
     letter-spacing: 1px;
     margin-bottom: .8rem;
+  }
+}
+.page.ordliste {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+
+  .content {
+    order: 2;
+  }
+}
+@media (max-width: 900px) {
+  .site-title {
+    margin-left: 0;
+  }
+  .page.ordliste {
+    grid-template-columns: 1fr;
+
+    .content {
+      order: 1;
+    }
   }
 }
 </style>

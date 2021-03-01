@@ -13,6 +13,7 @@
           {{ page.title }} <Wave />
         </a>
         <a class="featured" href="https://kurs.balansemerket.no">Nettkurs</a>
+        <a class="featured kort" href="/samtalekort">Samtalekort</a>
         <a class="balansekunst-link" href="https://balansekunstprosjektet.no" target="_blank">Til Balansekunst &#8599;</a>
       </nav>
     </div>
@@ -80,16 +81,19 @@ export default {
   a {
     display: inline-block;
     text-decoration: none;
-    margin: 0 1rem;
+    margin: 0 .8rem;
     position: relative;
     font-size: .8rem;
     &:nth-of-type(5) {
       margin-right: 0;
     }
     &.featured {
-      background: #76C2AF;
+      background: var(--color-green);
       padding: .2rem .8rem;
       border-radius: 2rem;
+      &.kort {
+        background: var(--color-pink);
+      }
     }
     &.balansekunst-link {
       position: absolute;
@@ -151,9 +155,11 @@ export default {
       display: block;
       margin: 1rem 0;
       &.featured {
-        display: inline-block;
+        display: block;
+        width: max-content;
         background: #76C2AF;
         padding: .4rem 1.2rem;
+        margin: 1rem 0 1rem auto;
         border-radius: 2rem;
       }
       &.balansekunst-link {

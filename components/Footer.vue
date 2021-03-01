@@ -100,12 +100,15 @@ export default {
   line-height: 1;
   border-bottom: 2px solid $color-black;
 }
-@media (max-width: $width-s) {
+@media (max-width: 800px) {
   .site-footer {
     padding-bottom: 5rem;
   }
   .columns {
+    grid-template-columns: 1fr;
     div {
+      max-width: 500px;
+      margin-bottom: 2rem;
       &:nth-child(1), &:nth-child(2), &:nth-child(3) {
         margin-left: 0;
       }

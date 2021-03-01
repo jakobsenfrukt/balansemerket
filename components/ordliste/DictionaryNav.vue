@@ -22,7 +22,7 @@ export default {
   apollo: {
     dictionary: gql`
     query {
-      dictionary: entries(section:dictionary) {
+      dictionary: entries(section: [dictionary], orderBy: "title ASC") {
     		... on DictionaryWord {
           title
           ingress
@@ -41,10 +41,10 @@ export default {
   letter-spacing: .06em;
   text-transform: uppercase;
   max-width: 12rem;
+  order: 1;
 
   ul {
-    max-width: 32rem;
-    margin: 0 auto 2rem;
+    margin: 0 0 2rem;
     padding: 0 0 0 1rem;
   }
   li {
@@ -62,13 +62,10 @@ export default {
     line-height: 1.3;
   }
 
-  position: absolute;
-  top: 0;
-  left: 0;
-
-  @media (max-width: $media-m) {
-    position: static;
-    margin: 3rem auto;
+  @media (max-width: 900px) {
+    margin: 3rem 0 0;
+    order: 2;
+    max-width: none;
   }
 }
 </style>
