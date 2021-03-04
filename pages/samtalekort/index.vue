@@ -512,7 +512,7 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 1002;
+  z-index: 3002;
   overflow-y: scroll;
   padding: 2rem 2rem 6rem;
 
@@ -694,7 +694,7 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 1002;
+  z-index: 3002;
   overflow-y: scroll;
   padding: 2rem 2rem 6rem;
 
@@ -741,7 +741,7 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 1000;
+  z-index: 3000;
   overflow-y: scroll;
   background: rgba(0, 0, 0, .5);
 
