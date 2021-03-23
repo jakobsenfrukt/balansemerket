@@ -3,6 +3,7 @@
     <div class="balansekunst">
       <h2>Utviklet av</h2>
       <a href="https://balansekunstprosjektet.no/" target="_blank" class="bklogo"><BKLogo invert /></a>
+      <p>med støtte fra <a href="https://www.sparebankstiftelsen.no/" target="_blank">Sparebankstiftelsen</a></p>
     </div>
     <div class="friends">
       <h2>i samarbeid med</h2>
@@ -64,6 +65,9 @@ h2 {
   text-align: left;
   font-size: 1.2rem;
   width: 100%;
+  margin: 0 0 1rem;
+}
+p {
   margin: 0 0 1rem;
 }
 .friends {
