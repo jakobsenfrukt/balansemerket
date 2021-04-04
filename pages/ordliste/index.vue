@@ -6,7 +6,7 @@
     <section class="page ordliste">
       <div class="content">
         <p class="lead">{{dictionary.ingress}}</p>
-        <div v-html="dictionary.body.content"></div>
+        <div v-html="dictionary.body"></div>
       </div>
       <DictionaryNav />
     </section>
@@ -37,11 +37,9 @@ export default {
     dictionary: gql`
     query {
       dictionary: entry(title: "Ordliste: Forside") {
-        ... on DictionaryIndex {
+        ... on dictionaryIndex_dictionaryIndex_Entry {
           ingress
-          body {
-            content
-          }
+          body
         }
       }
     }`

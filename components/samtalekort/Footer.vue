@@ -30,13 +30,13 @@ export default {
     cardIndex: gql`
     query {
       cardIndex: entry(title: "Samtalekort: Forside") {
-        ... on CardsIndex {
+        ... on cardsIndex_cardsIndex_Entry {
           partners {
-          ... on PartnersPartner {
+          ... on partners_partner_BlockType {
               partnerName
               websiteUrl
               logo {
-                thumb: url(transform: thumbnail)
+                thumb: url(transform: "thumbnail")
                 title
               }
             }

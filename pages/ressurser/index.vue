@@ -6,7 +6,7 @@
       <div>
         <ul class="page-list">
           <li v-for="(ressurs, index) in ressurser" :key="index">
-            <template v-if="ressurs.__typename === 'RessurserPdfRessurs'">
+            <template v-if="ressurs.__typename === 'ressurser_pdfRessurs_Entry'">
               <a :href="`${ressurs.pdf[0].url}`" target="_blank" class="pdf-ressurs">
                 <h2>{{ ressurs.title }}</h2>
                 <span class="pdf-label">(PDF)</span>
@@ -49,7 +49,7 @@ export default {
     ressursside: gql`
     query {
       ressursside: entry(title: "Samleside for ressurser") {
-        ... on AlleRessurser {
+        ... on alleRessurser_alleRessurser_Entry {
           overskrift
           ingress
         }
@@ -57,14 +57,14 @@ export default {
     }`,
     ressurser: gql`
     query {
-      ressurser: entries(section:ressurser) {
-        ... on Ressurser {
+      ressurser: entries(section: "ressurser") {
+        ... on ressurser_ressurser_Entry {
           __typename
           title
           ingress
           slug
         }
-        ... on RessurserPdfRessurs {
+        ... on ressurser_pdfRessurs_Entry {
           __typename
           title
           ingress

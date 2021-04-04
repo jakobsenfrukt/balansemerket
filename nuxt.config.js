@@ -1,13 +1,12 @@
 import fetch from 'node-fetch';
 import { execute, makePromise } from 'apollo-link';
 import { createHttpLink } from 'apollo-link-http';
-import { setContext } from 'apollo-link-context';
 import gql from 'graphql-tag'
 
-import getApolloConfig, { token } from './apollo.config'
+import getApolloConfig from './apollo.config'
 
 export default {
-  mode: 'universal',
+  target: 'static',
 
   /*
   ** Headers of the page
@@ -67,49 +66,37 @@ export default {
     routes: function () {
       const config = getApolloConfig()
       const uri = config.httpEndpoint
-      // console.log(lol().cache)
       const httpLink = createHttpLink({
         uri: uri,
         fetch: fetch,
         cache: config.cache,
       });
       
-      const authLink = setContext((_, { headers }) => {
-        return {
-          headers: {
-            ...headers,
-            authorization: token ? `Bearer ${token}` : "",
-          }
-        }
-      });
-
-      const link = authLink.concat(httpLink)
-
       const operation = {
         query: gql`
         query {
-          tiltak: entries(section:tiltak) {
-            ... on Tiltak {
+          tiltak: entries(section: "tiltak") {
+            ... on tiltak_tiltak_Entry {
               slug
             }
           }
-          ressurser: entries(section:ressurser) {
-            ... on Ressurser {
+          ressurser: entries(section: "ressurser") {
+            ... on ressurser_ressurser_Entry {
               slug
             }
-            ... on RessurserPdfRessurs {
+            ... on ressurser_pdfRessurs_Entry {
               slug
             }
           }
-          dictionary: entries(section:dictionary) {
-            ... on DictionaryWord {
+          dictionary: entries(section: "dictionary" ) {
+            ... on dictionary_word_Entry {
               slug
             }
           }
         }`
       }
       // For single execution operations, a Promise can be use
-      return makePromise(execute(link, operation))
+      return makePromise(execute(httpLink, operation))
       .then(result => { 
         var tiltakArray = result.data.tiltak.map(tiltak => `/tiltak/${tiltak.slug}/`)
         var ressursArray = result.data.ressurser.map(ressurser => `/ressurser/${ressurser.slug}/`)

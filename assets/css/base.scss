@@ -223,13 +223,13 @@ img.main-illustration {
     }
   }
 }
-.InnholdTrekkspill + .InnholdTrekkspill {
+.innhold_trekkspill_BlockType + .innhold_trekkspill_BlockType {
   .accordion {
     border-top: none;
     margin-top: 0;
   }
 }
-.InnholdTekst + .InnholdTrekkspill {
+.innhold_tekst_BlockType + .innhold_trekkspill_BlockType {
   margin-top: 4rem;
 }
 .pdf {

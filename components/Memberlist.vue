@@ -13,7 +13,7 @@
       </a>
     </div>
     <div v-else>
-      <div v-html="deltakere.reservetekst.content"></div>
+      <div v-html="deltakere.reservetekst"></div>
     </div>
   </section>
 </template>
@@ -26,9 +26,9 @@ export default {
     deltakere: gql`
     query {
       deltakere: entry(title: "Deltakere") {
-        ... on DeltakereMedlemmer {
+        ... on deltakere_medlemmer_Entry {
           deltakere {
-            ... on DeltakereDeltaker {
+            ... on deltakere_deltaker_BlockType {
               navn
               tekst
               logo {
@@ -38,9 +38,7 @@ export default {
               nettsideUrl
             }
           }
-          reservetekst {
-            content
-          }
+          reservetekst
         }
       }
     }`

@@ -1,6 +1,6 @@
 <template>
   <div class="card" :class="{checked: checked}">
-    <div class="content" v-html="card.cardText.content"></div>
+    <div class="content" v-html="card.cardText"></div>
     <div class="checkmark"></div>
   </div>
 </template>

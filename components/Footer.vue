@@ -1,14 +1,14 @@
 <template>
   <footer class="site-footer">
     <div class="columns">
-      <div v-for="(block, index) in globals.footer.tekstkolonner" :key="index" class="column">
+      <div v-for="(block, index) in footer.tekstkolonner" :key="index" class="column">
         <h3 v-if="block.overskrift">{{ block.overskrift }}</h3>
-        <div v-html="block.tekst.content"></div>
+        <div v-html="block.tekst"></div>
       </div>
     </div>
     <a href="https://balansekunstprosjektet.no/" target="_blank" class="bklogo"><BKLogo invert /></a>
     <div class="footnote">
-      {{ globals.footer.bunntekst }}
+      {{ footer.bunntekst }}
     </div>
     <a class="to-top" href="#">
       Til toppen
@@ -25,16 +25,14 @@ export default {
     BKLogo
   },
   apollo: {
-    globals: gql`
+    footer: gql`
     query {
-      globals {
-        footer {
+      footer: globalSet(ref: "Footer") {
+        ... on footer_GlobalSet {
           tekstkolonner {
-            ... on TekstkolonnerTekstkolonne {
+            ... on tekstkolonner_tekstkolonne_BlockType {
               overskrift
-              tekst {
-                content
-              }
+              tekst
             }
           }
           bunntekst

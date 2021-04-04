@@ -12,7 +12,7 @@
     <section class="page samtalekort">
       <div class="intro" v-if="cardNumber === -1">
         <div class="intro-content">
-          <div class="content" v-html="cardIndex.introText.content"></div>
+          <div class="content" v-html="cardIndex.introText"></div>
           <button class="button" @click="cardNumber++">Trekk et kort</button>
         </div>
       </div>
@@ -30,7 +30,7 @@
       </div>
       <div class="end" v-if="cardNumber === cardStack.length">
         <div class="end-content">
-          <div class="content" v-html="cardIndex.endText.content"></div>
+          <div class="content" v-html="cardIndex.endText"></div>
           <button class="button" @click="cardNumber = -1">Start på nytt</button>
         </div>
       </div>
@@ -95,7 +95,7 @@
 
     <div class="instructions" id="instructions">
       <div class="instructions-wrapper">
-        <div class="content" v-html="cardIndex.body.content"></div>
+        <div class="content" v-html="cardIndex.body"></div>
         <div class="instructions-done">
           <button class="button" @click="toggleModal('instructions')">Sett i gang</button>
         </div>
@@ -386,36 +386,28 @@ export default {
     cardIndex: gql`
     query {
       cardIndex: entry(title: "Samtalekort: Forside") {
-        ... on CardsIndex {
+        ... on cardsIndex_cardsIndex_Entry {
           ingress
-          introText {
-            content
-          }
-          endText {
-            content
-          }
-          body {
-            content
-          }
+          introText
+          endText
+          body
         }
       }
     }`,
     cards: gql`
     query {
-      cards: entries(section:cards) {
-    		... on Cards {
+      cards: entries(section: "cards") {
+    		... on cards_cards_Entry {
           id
           title
-          cardText {
-            content
-          }
+          cardText
           cardType
           category {
             id
             title
           }
           words {
-            ... on DictionaryWord {
+            ... on dictionary_word_Entry {
               title
               ingress
               slug
@@ -428,7 +420,7 @@ export default {
     categories: gql`
     query {
       categories: categories {
-    		... on CardsCategory {
+    		... on cards_Category {
           id
           title
         }

@@ -5,7 +5,7 @@
       {{ word.title }}
     </h1>
     <section class="page ordliste">
-      <div class="content" v-html="word.body.content"></div>
+      <div class="content" v-html="word.body"></div>
       <DictionaryNav />
     </section>
   </main>
@@ -38,13 +38,11 @@ export default {
       },
       query: gql`
       query Dictionary($slug: String!) {
-        word: entry(slug: $slug) {
-          ... on DictionaryWord {
+        word: entry(slug: [$slug]) {
+          ... on dictionary_word_Entry {
             title
             ingress
-            body {
-              content
-            }
+            body
             slug
           }
         }

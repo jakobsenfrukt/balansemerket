@@ -22,8 +22,8 @@ export default {
   apollo: {
     dictionary: gql`
     query {
-      dictionary: entries(section: [dictionary], orderBy: "title ASC") {
-    		... on DictionaryWord {
+      dictionary: entries(section: ["dictionary"], orderBy: "title ASC") {
+    		... on dictionary_word_Entry {
           title
           ingress
           slug

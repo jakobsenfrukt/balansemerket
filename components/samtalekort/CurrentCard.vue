@@ -1,6 +1,6 @@
 <template>
   <div class="card current">
-    <div class="content" v-html="card.cardText.content"></div>
+    <div class="content" v-html="card.cardText"></div>
     <div v-if="card.disclaimer" class="disclaimer">{{ card.disclaimer }}</div>
     <div class="show-word" v-if="card.words.length">
       <button class="button button-question" @click="showWord = !showWord" :aria-label="`Hva betyr ${card.words[0].title}`"></button>

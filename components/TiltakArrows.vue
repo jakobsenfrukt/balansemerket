@@ -36,8 +36,8 @@ export default {
   apollo: {
     tiltak: gql`
     query {
-      tiltak: entries(section:tiltak) {
-    		... on Tiltak {
+      tiltak: entries(section: "tiltak") {
+    		... on tiltak_tiltak_Entry {
           title
           slug
         }

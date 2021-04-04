@@ -6,21 +6,21 @@
       <img v-if="tiltakside.toppbilde.length" class="main-illustration" :src="tiltakside.toppbilde[0].fullWidth" :alt="tiltakside.toppbilde[0].title" />
       <div class="main-content" v-if="tiltakside.innhold.length">
         <div v-for="(block, index) in tiltakside.innhold" :key="index" :class="block.__typename">
-          <div v-if="block.__typename === 'InnholdTekst'" class="text">
+          <div v-if="block.__typename === 'innhold_tekst_BlockType'" class="text">
             <h2 v-if="block.overskrift">{{ block.overskrift }}</h2>
-            <div v-html="block.tekst.content"></div>
+            <div v-html="block.tekst"></div>
           </div>
-          <div v-if="block.__typename === 'InnholdBilde'" class="image">
+          <div v-if="block.__typename === 'innhold_bilde_BlockType'" class="image">
             <img :src="block.bilde[0].fullWidth" :alt="block.bilde[0].title" />
           </div>
-          <div v-if="block.__typename === 'InnholdTrekkspill'" class="accordion" :id="`accordion-${index}`">
+          <div v-if="block.__typename === 'innhold_trekkspill_BlockType'" class="accordion" :id="`accordion-${index}`">
             <h2 @click="readMore('accordion-' + index)" class="read-more">{{ block.overskrift }}</h2>
-            <div class="content" v-html="block.tekst.content"></div>
+            <div class="content" v-html="block.tekst"></div>
           </div>
-          <div v-if="block.__typename === 'InnholdFremhevetTekst'" class="text large">
-            <div v-html="block.tekst.content"></div>
+          <div v-if="block.__typename === 'innhold_fremhevetTekst_BlockType'" class="text large">
+            <div v-html="block.tekst"></div>
           </div>
-          <div v-if="block.__typename === 'InnholdPdf'" class="pdf">
+          <div v-if="block.__typename === 'innhold_pdf_BlockType'" class="pdf">
             <a :href="block.pdf[0].url" target="_blank">{{ block.lenketekst }}</a>
           </div>
         </div>
@@ -58,42 +58,36 @@ export default {
     tiltakside: gql`
     query {
       tiltakside: entry(title: "Samleside for tiltak") {
-        ... on AlleTiltak {
+        ... on alleTiltak_alleTiltak_Entry {
           overskrift
           ingress
           toppbilde {
-            fullWidth: url(transform: fullWidth)
+            fullWidth: url(transform: "fullWidth")
             title
           }
           innhold {
-            ... on InnholdTekst {
+            ... on innhold_tekst_BlockType {
               __typename
               overskrift
-              tekst {
-                content
-              }
+              tekst
             }
-            ... on InnholdBilde {
+            ... on innhold_bilde_BlockType {
               __typename
               bilde {
-                fullWidth: url(transform: fullWidth)
+                fullWidth: url(transform: "fullWidth")
                 title
               }
             }
-            ... on InnholdTrekkspill {
+            ... on innhold_trekkspill_BlockType {
               __typename
               overskrift
-              tekst {
-                content
-              }
+              tekst
             }
-            ... on InnholdFremhevetTekst {
+            ... on innhold_fremhevetTekst_BlockType {
               __typename
-              tekst {
-                content
-              }
+              tekst
             }
-            ... on InnholdPdf {
+            ... on innhold_pdf_BlockType {
               __typename
               pdf {
                 url
@@ -103,8 +97,8 @@ export default {
           }
         }
       }
-      tiltak: entries(section:tiltak) {
-        ... on Tiltak {
+      tiltak: entries(section: "tiltak") {
+        ... on tiltak_tiltak_Entry {
           title
           slug
         }
@@ -112,8 +106,8 @@ export default {
     }`,
     tiltak: gql`
     query {
-      tiltak: entries(section:tiltak) {
-        ... on Tiltak {
+      tiltak: entries(section: "tiltak") {
+        ... on tiltak_tiltak_Entry {
           title
           slug
         }
