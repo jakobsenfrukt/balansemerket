@@ -3,7 +3,6 @@
     <h1>{{ ressurser.title }}</h1>
     <section class="page ressurs-page">
       <ContentBlocks v-if="ressurser.innhold.length" :content="ressurser.innhold" />
-      <ressursArrows :current="ressurser.slug" />
     </section>
   </main>
 </template>

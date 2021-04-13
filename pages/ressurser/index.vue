@@ -2,11 +2,7 @@
   <main class="site-main">
     <h1>{{ ressursside.overskrift }}</h1>
     <p v-if="ressursside.ingress" class="lead">{{ ressursside.ingress }}</p>
-    <section class="resource-list">
-      <div>
-        {{ categories }}
-      </div>
-    </section>
+    <ResourceList :categories="categories" :resources="ressurser" />
     <section class="page ressurser">
       <p v-if="ressursside.ingress" class="lead">{{ ressursside.ingress }}</p>
       <div>
@@ -32,11 +28,11 @@
 
 <script>
 import gql from 'graphql-tag'
-import TiltakNav from '~/components/TiltakNav.vue'
+import ResourceList from '~/components/ressurser/ResourceList.vue'
 
 export default {
   components: {
-    TiltakNav
+    ResourceList
   },
   head () {
     return {
@@ -69,6 +65,10 @@ export default {
           title
           ingress
           slug
+          resourcesCategory {
+            id
+            title
+          }
         }
         ... on ressurser_pdfRessurs_Entry {
           __typename
@@ -77,15 +77,21 @@ export default {
           pdf {
             url
           }
+          resourcesCategory {
+            id
+            title
+          }
         }
       }
     }`,
     categories: gql`
     query {
-      categories {
+      categories(group: "ressurser") {
         ... on ressurser_Category {
           id
           title
+          ingress
+          slug
         }
       }
     }`
