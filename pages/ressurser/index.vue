@@ -1,6 +1,12 @@
 <template>
   <main class="site-main">
     <h1>{{ ressursside.overskrift }}</h1>
+    <p v-if="ressursside.ingress" class="lead">{{ ressursside.ingress }}</p>
+    <section class="resource-list">
+      <div>
+        {{ categories }}
+      </div>
+    </section>
     <section class="page ressurser">
       <p v-if="ressursside.ingress" class="lead">{{ ressursside.ingress }}</p>
       <div>
@@ -71,6 +77,15 @@ export default {
           pdf {
             url
           }
+        }
+      }
+    }`,
+    categories: gql`
+    query {
+      categories {
+        ... on ressurser_Category {
+          id
+          title
         }
       }
     }`

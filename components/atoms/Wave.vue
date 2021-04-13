@@ -9,12 +9,11 @@
 </template>
 
 <style lang="scss">
-@import '@/assets/css/variables.scss';
 .wave {
   width: 24px;
   height: 7px;
   path {
-    stroke: $color-text;
+    stroke: var(--color-text);
     stroke-dasharray: 100;
     stroke-dashoffset: 100;
   }

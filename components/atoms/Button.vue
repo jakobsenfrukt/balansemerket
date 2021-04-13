@@ -17,8 +17,8 @@ export default {
   display: block;
   width: 80%;
   max-width: 500px;
-  background: #000;
-  color: #fff;
+  background: var(--color-black);
+  color: var(--color-white);
   font-family: inherit;
   font-size: 1.2rem;
   text-decoration: none;
@@ -33,7 +33,7 @@ export default {
   }
 
   &:hover {
-    color: #fff;
+    color: var(--color-white);
     transform: scale(1.05);
   }
 }

@@ -35,7 +35,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/css/variables.scss';
 .dictionary-nav {
   font-size: .8rem;
   letter-spacing: .06em;

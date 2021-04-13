@@ -1,7 +1,7 @@
 html {
 	font-size: calc(14px + 6 * ((100vw - 320px) / 1200));
   height: 100%;
-  background: $color-background;
+  background: var(--color-background);
 }
 
 * {
@@ -16,8 +16,8 @@ body {
   margin: 0;
   overflow-x: hidden;
 
-  background-color: $color-background;
-  color: $color-text;
+  background-color: var(--color-background);
+  color: var(--color-text);
   font-family: $font-body;
   line-height: 1.4;
 }
@@ -42,7 +42,7 @@ a {
 }
 
 h1, h2, h3, h4, h5, h6, p, ul, ol {
-  max-width: $width-s;
+  max-width: var(--width-s);
   margin: auto;
 }
 
@@ -55,7 +55,7 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 {
   font-size: 3.6rem;
-  @media (max-width: $media-s) {
+  @media (max-width: 700px) {
     font-size: 2.8rem;
   }
 }
@@ -63,7 +63,7 @@ h1 {
 h2 {
   font-size: 2rem;
   margin-bottom: 1rem;
-  @media (max-width: $media-s) {
+  @media (max-width: 700px) {
     font-size: 1.8rem;
   }
 }
@@ -104,7 +104,7 @@ img.main-illustration {
   object-fit: contain;
   margin: 0 auto 3rem;
 
-  @media (max-width: $media-s) {
+  @media (max-width: 700px) {
     margin-left: -4rem;
     margin-right: -4rem;
     width: calc(100% + 8rem);
@@ -116,7 +116,7 @@ img.main-illustration {
     color: inherit;
     text-decoration: none;
     display: inline-block;
-    border-bottom: 2px solid $color-text;
+    border-bottom: 2px solid var(--color-text);
     line-height: 1;
     transition: all .2s ease-in-out;
     &:hover {
@@ -125,7 +125,7 @@ img.main-illustration {
     }
   }
   ul, ol {
-    max-width: $width-s;
+    max-width: var(--width-s);
     margin: 0 auto 2rem;
     padding-left: 2rem;
 
@@ -148,7 +148,7 @@ img.main-illustration {
   .text.large {
     font-size: 1.4rem;
     line-height: 1.2;
-    width: $width-s;
+    width: var(--width-s);
     max-width: 100%;
 
     ul {
@@ -172,7 +172,7 @@ img.main-illustration {
 }
 .content {
   ul, ol {
-    max-width: $width-s;
+    max-width: var(--width-s);
     margin: 0 auto 2rem;
     padding-left: 2rem;
 
@@ -189,40 +189,6 @@ img.main-illustration {
   max-width: 1200px;
   margin: 2rem auto;
 }
-.accordion {
-  width: 100%;
-  max-width: $width-s;
-  margin: 2rem auto 0;
-  padding: .8rem 0;
-  border-top: 2px solid $color-black;
-  border-bottom: 2px solid $color-black;
-  .read-more {
-    cursor: pointer;
-    margin: 0;
-    padding-right: 2rem;
-    position: relative;
-    &:after {
-      content: "▼";
-      position: absolute;
-      right: 0;
-      top: 0;
-    }
-  }
-  .content {
-    margin: 2rem auto;
-    display: none;
-  }
-  &.visible {
-    .content {
-      display: block;
-    }
-    .read-more {
-      &:after {
-        content: "▲";
-      }
-    }
-  }
-}
 .innhold_trekkspill_BlockType + .innhold_trekkspill_BlockType {
   .accordion {
     border-top: none;
@@ -233,9 +199,9 @@ img.main-illustration {
   margin-top: 4rem;
 }
 .pdf {
-  max-width: $width-s;
+  max-width: var(--width-s);
   margin: 2rem auto;
-  color: $color-red;
+  color: var(--color-brightred);
   font-weight: 700;
   font-size: 1.4rem;
   line-height: 1.2;

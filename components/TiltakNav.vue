@@ -31,7 +31,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/css/variables.scss';
 .tiltak-nav {
   font-size: .8rem;
   letter-spacing: .06em;
@@ -54,7 +53,7 @@ export default {
   top: 0;
   left: 0;
 
-  @media (max-width: $media-m) {
+  @media (max-width: 1000px) {
     position: static;
     margin: 3rem auto;
   }

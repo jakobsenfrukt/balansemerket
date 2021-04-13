@@ -56,7 +56,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/css/variables.scss';
 .site-header {
   width: 100%;
   padding: 2rem;
@@ -120,29 +119,11 @@ export default {
   top: 2rem;
   right: 2rem;
   font-size: 2rem;
-
-  /*width: 2rem;
-  height: 3px;
-  background: $color-black;
-  position: relative;
-  &:before, &:after {
-    content: " ";
-    display: block;
-    width: 2rem;
-    height: 3px;
-    background: $color-black;
-    position: absolute;
-    top: -8px;
-  }
-  &:after {
-    top: auto;
-    bottom: -8px;
-  }*/
   
   display: none;
 }
 
-@media (max-width: $media-s) {
+@media (max-width: 700px) {
   .site-header {
     display: block;
   }
@@ -157,7 +138,7 @@ export default {
       &.featured {
         display: block;
         width: max-content;
-        background: #76C2AF;
+        background: var(--color-green);
         padding: .4rem 1.2rem;
         margin: 1rem 0 1rem auto;
         border-radius: 2rem;

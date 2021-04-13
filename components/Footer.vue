@@ -44,13 +44,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/css/variables.scss';
 .site-footer {
   width: 100%;
   font-size: .8rem;
   padding: 2rem;
-  background: $color-text;
-  color: $color-background;
+  background: var(--color-text);
+  color: var(--color-background);
 }
 .columns {
   display: grid;
@@ -75,12 +74,12 @@ export default {
       color: inherit;
       text-decoration: none;
       display: inline-block;
-      border-bottom: 2px solid $color-text;
+      border-bottom: 2px solid var(--color-text);
       line-height: 1;
       transition: all .2s ease-in-out;
       &:hover {
-        color: $color-red;
-        border-color: $color-red;
+        color: var(--color-red);
+        border-color: var(--color-red);
       }
     }
   }
@@ -96,7 +95,7 @@ export default {
   display: block;
   float: right;
   line-height: 1;
-  border-bottom: 2px solid $color-black;
+  border-bottom: 2px solid var(--color-black);
 }
 @media (max-width: 800px) {
   .site-footer {

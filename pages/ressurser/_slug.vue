@@ -2,25 +2,7 @@
   <main class="site-main">
     <h1>{{ ressurser.title }}</h1>
     <section class="page ressurs-page">
-      <div v-for="(block, index) in ressurser.innhold" :key="index" :class="block.__typename">
-        <div v-if="block.__typename === 'innhold_tekst_BlockType'" class="text">
-          <h2 v-if="block.overskrift">{{ block.overskrift }}</h2>
-          <div v-html="block.tekst"></div>
-        </div>
-        <div v-if="block.__typename === 'innhold_bilde_BlockType'" class="image">
-          <img :src="block.bilde[0].fullWidth" :alt="block.bilde[0].title" />
-        </div>
-        <div v-if="block.__typename === 'innhold_trekkspill_BlockType'" class="accordion" :id="`accordion-${index}`">
-          <h2 @click="readMore('accordion-' + index)" class="read-more">{{ block.overskrift }}</h2>
-          <div class="content" v-html="block.tekst"></div>
-        </div>
-        <div v-if="block.__typename === 'innhold_fremhevetTekst_BlockType'" class="text large">
-          <div v-html="block.tekst"></div>
-        </div>
-        <div v-if="block.__typename === 'innhold_pdf_BlockType'" class="pdf">
-          <a :href="block.pdf[0].url" target="_blank">{{ block.lenketekst }}</a>
-        </div>
-      </div>
+      <ContentBlocks v-if="ressurser.innhold.length" :content="ressurser.innhold" />
       <ressursArrows :current="ressurser.slug" />
     </section>
   </main>
@@ -28,7 +10,12 @@
 
 <script>
 import gql from 'graphql-tag'
+import ContentBlocks from '~/components/atoms/ContentBlocks.vue'
+
 export default {
+  components: {
+    ContentBlocks
+  },
   head () {
     return {
       title: this.ressurser.title,

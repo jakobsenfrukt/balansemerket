@@ -47,7 +47,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/css/variables.scss';
 .members {
   margin-top: 8rem;
   h2 {
@@ -61,7 +60,7 @@ export default {
   max-width: 1200px;
   margin: 4rem auto;
 
-  @media (max-width: $media-m) {
+  @media (max-width: 1000px) {
     display: block;
   }
 }
@@ -72,7 +71,7 @@ export default {
   margin: 0 auto 2rem;
   text-decoration: none;
 
-  @media (max-width: $media-m) {
+  @media (max-width: 1000px) {
     width: 100%;
     max-width: 32rem;
   }

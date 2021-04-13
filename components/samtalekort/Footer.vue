@@ -49,13 +49,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/css/variables.scss';
 .site-footer {
   width: 100%;
   font-size: .8rem;
   padding: 2rem;
-  background: $color-text;
-  color: $color-background;
+  background: var(--color-text);
+  color: var(--color-background);
   display: grid;
   grid-template-columns: repeat(3, 1fr);
 }
@@ -99,7 +98,7 @@ p {
   display: block;
   float: right;
   line-height: 1;
-  border-bottom: 2px solid $color-black;
+  border-bottom: 2px solid var(--color-black);
 }
 @media (max-width: 1000px) {
   .friend-list {
