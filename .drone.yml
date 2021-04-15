@@ -1,0 +1,55 @@
+kind: pipeline
+type: docker
+name: default
+
+concurrency:
+  limit: 1
+
+trigger:
+  branch:
+    - master
+
+steps:
+  - name: restore-cache
+    image: drillster/drone-volume-cache
+    settings:
+      restore: true
+      mount:
+        - ./node_modules
+    volumes:
+      - name: cache
+        path: /cache
+
+  - name: build
+    image: node:14.11
+    commands:
+      - npm ci --prefer-offline --no-audit --progress=false
+      - npm run generate
+
+  - name: rebuild-cache
+    image: drillster/drone-volume-cache
+    settings:
+      rebuild: true
+      mount:
+        - ./node_modules
+    volumes:
+      - name: cache
+        path: /cache
+
+  - name: deploy
+    image: drillster/drone-rsync
+    environment:
+      RSYNC_KEY:
+        from_secret: balanse_ssh_key
+    settings:
+      user: balanse
+      hosts:
+        - banana.444.no
+      source: ./dist/
+      target: ~/www/balansemerket.no/public/
+      secrets: ["balanse_ssh_key"]
+
+volumes:
+  - name: cache
+    host:
+      path: /tmp/drone/cache
