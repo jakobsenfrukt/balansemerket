@@ -419,7 +419,7 @@ export default {
     }`,
     categories: gql`
     query {
-      categories: categories {
+      categories: categories(group: "cards") {
     		... on cards_Category {
           id
           title
