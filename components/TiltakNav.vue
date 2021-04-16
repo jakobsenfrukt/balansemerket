@@ -1,6 +1,9 @@
 <template>
   <nav class="tiltak-nav">
     <ol>
+      <li>
+        <a href="/tiltak"><strong>Tiltak</strong></a>
+      </li>
       <li v-for="(tiltak, index) in tiltak" :key="index">
         <a :href="`/tiltak/${tiltak.slug}`">{{ tiltak.title }}</a>
       </li>
@@ -36,9 +39,10 @@ export default {
   letter-spacing: .06em;
   text-transform: uppercase;
   ol {
+    list-style: none;
     max-width: 32rem;
     margin: 0 auto 2rem;
-    padding: 0 0 0 1rem;
+    padding: 0;
   }
   li {
     margin: 0 0 1rem;

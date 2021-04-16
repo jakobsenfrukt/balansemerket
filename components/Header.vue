@@ -34,10 +34,6 @@ export default {
       open: false,
       page: [
         {
-          title: "Hjem",
-          slug: "/#"
-        },
-        {
           title: "Tiltak",
           slug: "/tiltak"
         },

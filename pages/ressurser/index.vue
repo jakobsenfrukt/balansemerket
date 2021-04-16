@@ -3,26 +3,6 @@
     <h1>{{ ressursside.overskrift }}</h1>
     <p v-if="ressursside.ingress" class="lead">{{ ressursside.ingress }}</p>
     <ResourceList :categories="categories" :resources="ressurser" />
-    <section class="page ressurser">
-      <p v-if="ressursside.ingress" class="lead">{{ ressursside.ingress }}</p>
-      <div>
-        <ul class="page-list">
-          <li v-for="(ressurs, index) in ressurser" :key="index">
-            <template v-if="ressurs.__typename === 'ressurser_pdfRessurs_Entry'">
-              <a :href="`${ressurs.pdf[0].url}`" target="_blank" class="pdf-ressurs">
-                <h2>{{ ressurs.title }}</h2>
-                <span class="pdf-label">(PDF)</span>
-              </a>
-              <p>{{ ressurs.ingress }}</p>
-            </template>
-            <template v-else>
-              <a :href="`/ressurser/${ressurs.slug}`"><h2>{{ ressurs.title }}</h2></a>
-              <p>{{ ressurs.ingress }}</p>
-            </template>
-          </li>
-        </ul>
-      </div>
-    </section>
   </main>
 </template>
 
@@ -92,6 +72,7 @@ export default {
           title
           ingress
           slug
+          color
         }
       }
     }`
