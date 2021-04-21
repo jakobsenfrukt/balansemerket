@@ -182,12 +182,18 @@ export default {
         object-fit: cover;
       }
     }
-    &-nobackground {
+    &.nobackground {
       .resource-image {
         border-bottom-left-radius: 1rem;
         border-bottom-right-radius: 1rem;
         border-top-left-radius: 1rem;
         border-top-right-radius: 1rem;
+        img {
+          border-bottom-left-radius: 1rem;
+          border-bottom-right-radius: 1rem;
+          border-top-left-radius: 1rem;
+          border-top-right-radius: 1rem;
+        }
       }
     }
     &-title {

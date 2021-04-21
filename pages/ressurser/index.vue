@@ -2,7 +2,7 @@
   <main class="site-main">
     <h1>{{ ressursside.overskrift }}</h1>
     <p v-if="ressursside.ingress" class="lead">{{ ressursside.ingress }}</p>
-    <ResourceList :categories="categories" :resources="ressurser" />
+    <ResourceList :categories="categories" :resources="ressurser" :resourcePage="ressursside" />
   </main>
 </template>
 
@@ -34,6 +34,9 @@ export default {
         ... on alleRessurser_alleRessurser_Entry {
           overskrift
           ingress
+          coursesLead
+          cardsLead
+          dictionaryLead
         }
       }
     }`,

@@ -3,23 +3,23 @@
     <ul class="resource-grid">
        <li class="category quiz">
         <h2 class="category-title">Nettkurs</h2>
-        <p class="lead">Litt om nettkurs</p>
+        <p class="lead">{{ resourcePage.coursesLead }}</p>
         <a class="category-link" href="https://kurs.balansemerket.no/">Gå til nettkursene</a>
       </li>
       <li class="category cards">
         <h2 class="category-title">Samtalekort</h2>
-        <p class="lead">Litt om samtalekort</p>
+        <p class="lead">{{ resourcePage.cardsLead }}</p>
         <a class="category-link" href="/samtalekort">Gå til samtalekortene</a>
       </li>
       <li class="category dictionary">
         <h2 class="category-title">Ordliste</h2>
-        <p class="lead">Litt om ordlisten</p>
+        <p class="lead">{{ resourcePage.dictionaryLead }}</p>
         <a class="category-link" href="/ordliste">Gå til ordlisten</a>
       </li>
       <li v-for="category in categories" :key="category.id" class="category" :style="{ background: category.color}">
         <h2 class="category-title">{{ category.title }}</h2>
         <p class="lead" v-if="category.ingress">{{ category.ingress }}</p>
-        <a class="category-link" :href="`/ressurser/kategori/${category.slug}`">Gå til kategori</a>
+        <a class="category-link" :href="`/ressurser/kategori/${category.slug}`">Gå til kategorien {{ category.title }}</a>
       </li>
     </ul>
   </section>
@@ -29,7 +29,8 @@
 export default {
   props: {
     categories: Array,
-    resources: Array
+    resources: Array,
+    resourcePage: Object
   }
 }
 </script>
