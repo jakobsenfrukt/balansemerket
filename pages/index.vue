@@ -1,32 +1,17 @@
 <template>
   <main class="site-main">
-    <h1>{{ hjem.overskrift }}</h1>
+    <h1 class="site-title">{{ hjem.overskrift }}</h1>
     <section class="page index">
-      <p v-if="hjem.ingress">{{ hjem.ingress }}</p>
-      <img v-if="hjem.toppbilde.length" class="main-illustration" :src="hjem.toppbilde[0].fullWidth" :alt="hjem.toppbilde[0].title" />
-      <div class="main-content" v-if="hjem.innhold.length">
-        <div v-for="(block, index) in hjem.innhold" :key="index" :class="block.__typename">
-          <div v-if="block.__typename === 'innhold_tekst_BlockType'" class="text">
-            <h2 v-if="block.overskrift">{{ block.overskrift }}</h2>
-            <div v-html="block.tekst"></div>
-          </div>
-          <div v-if="block.__typename === 'innhold_bilde_BlockType'" class="image">
-            <img :src="block.bilde[0].fullWidth" :alt="block.bilde[0].title" />
-          </div>
-          <div v-if="block.__typename === 'innhold_trekkspill_BlockType'" class="accordion" :id="`accordion-${index}`">
-            <h2 @click="readMore('accordion-' + index)" class="read-more">{{ block.overskrift }}</h2>
-            <div class="content" v-html="block.tekst"></div>
-          </div>
-          <div v-if="block.__typename === 'innhold_fremhevetTekst_BlockType'" class="text large">
-            <div v-html="block.tekst"></div>
-          </div>
-          <div v-if="block.__typename === 'innhold_pdf_BlockType'" class="pdf">
-            <a :href="block.pdf[0].url" target="_blank">{{ block.lenketekst }}</a>
-          </div>
-        </div>
+      <div class="content">
+        <p v-if="hjem.ingress">{{ hjem.ingress }}</p>
+        <img v-if="hjem.toppbilde.length" class="main-illustration" :src="hjem.toppbilde[0].fullWidth" :alt="hjem.toppbilde[0].title" />
+        <ContentBlocks v-if="hjem.innhold.length" :content="hjem.innhold" />
+        <TiltakArrows index />
       </div>
-      <TiltakArrows index />
-      <TiltakNav />
+      <div class="navigation">
+        <TiltakNav index />
+        <RessursNav />
+      </div>
     </section>
   </main>
 </template>
@@ -35,11 +20,15 @@
 import gql from 'graphql-tag'
 import TiltakArrows from '~/components/TiltakArrows.vue'
 import TiltakNav from '~/components/TiltakNav.vue'
+import RessursNav from '~/components/RessursNav.vue'
+import ContentBlocks from '~/components/atoms/ContentBlocks.vue'
 
 export default {
   components: {
     TiltakArrows,
-    TiltakNav
+    TiltakNav,
+    RessursNav,
+    ContentBlocks
   },
   head () {
     return {
@@ -103,6 +92,57 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.site-title {
+  margin-left: 25%;
+}
+.page.index {
+  display: grid;
+  grid-template-columns: 25% 1fr;
 
+  .content {
+    order: 2;
+  }
+  .navigation {
+    order: 1;
+    z-index: 2;
+    position: relative;
+  }
+}
+.main-illustration {
+  display: block;
+  max-width: 1200px;
+  max-height: 700px;
+  object-fit: contain;
+  margin: 0 -10% 0 -20%;
+  width: calc(100% + 25%);
+  z-index: 1;
+  position: relative;
+
+  @media (max-width: 1200px) {
+    margin-left: -4rem;
+    width: 100%;
+  }
+
+  @media (max-width: 900px) {
+    margin-left: -4rem;
+    margin-right: -4rem;
+    width: calc(100% + 8rem);
+  }
+}
+@media (max-width: 900px) {
+  .site-title {
+    margin-left: 0;
+  }
+  .page.index {
+    grid-template-columns: 1fr;
+
+    .content {
+      order: 1;
+    }
+    .navigation {
+      order: 2;
+    }
+  }
+}
 </style>
 

@@ -3,22 +3,19 @@
 $font-body: 'work sans', helvetica, arial, sans-serif;
 $font-heading: 'montserrat', helvetica, arial, sans-serif;
 
-$color-white: rgb(255, 255, 255);
-$color-black: rgb(0, 0, 0);
-$color-red: #e73636;
-
 :root {
   --color-white: rgb(255, 255, 255);
   --color-black: rgb(0, 0, 0);
   --color-green: #76C2AF;
   --color-pink: #E269A3;
   --color-darkgreen: #0F4138;
-  --color-yellow: #f5efd6;
+  --color-yellow: #FFF7D2;
 
   --color-lightgreen: #91e2ce;
   --color-brightyellow: #ecdd88;
   --color-orange: #f7bd9b;
   --color-red: #f78d8d;
+  --color-brightred: #e73636;
 
   --color-background: var(--color-white);
   --color-text: var(--color-black);
@@ -33,16 +30,3 @@ $color-red: #e73636;
   --media-l: 1600px;
   --media-xl: 1900px;
 }
-
-$color-background: $color-white;
-$color-text: $color-black;
-
-$width-xs: 21rem;
-$width-s: 32rem;
-$width-m: 42rem;
-$width-l: 56rem;
-
-$media-s: 700px;
-$media-m: 1000px;
-$media-l: 1600px;
-$media-xl: 1900px;

@@ -1,36 +1,18 @@
 <template>
   <main class="site-main">
     <h1>{{ ressursside.overskrift }}</h1>
-    <section class="page ressurser">
-      <p v-if="ressursside.ingress" class="lead">{{ ressursside.ingress }}</p>
-      <div>
-        <ul class="page-list">
-          <li v-for="(ressurs, index) in ressurser" :key="index">
-            <template v-if="ressurs.__typename === 'ressurser_pdfRessurs_Entry'">
-              <a :href="`${ressurs.pdf[0].url}`" target="_blank" class="pdf-ressurs">
-                <h2>{{ ressurs.title }}</h2>
-                <span class="pdf-label">(PDF)</span>
-              </a>
-              <p>{{ ressurs.ingress }}</p>
-            </template>
-            <template v-else>
-              <a :href="`/ressurser/${ressurs.slug}`"><h2>{{ ressurs.title }}</h2></a>
-              <p>{{ ressurs.ingress }}</p>
-            </template>
-          </li>
-        </ul>
-      </div>
-    </section>
+    <p v-if="ressursside.ingress" class="lead">{{ ressursside.ingress }}</p>
+    <ResourceList :categories="categories" :resources="ressurser" :resourcePage="ressursside" />
   </main>
 </template>
 
 <script>
 import gql from 'graphql-tag'
-import TiltakNav from '~/components/TiltakNav.vue'
+import ResourceList from '~/components/ressurser/ResourceList.vue'
 
 export default {
   components: {
-    TiltakNav
+    ResourceList
   },
   head () {
     return {
@@ -52,6 +34,9 @@ export default {
         ... on alleRessurser_alleRessurser_Entry {
           overskrift
           ingress
+          coursesLead
+          cardsLead
+          dictionaryLead
         }
       }
     }`,
@@ -63,6 +48,10 @@ export default {
           title
           ingress
           slug
+          resourcesCategory {
+            id
+            title
+          }
         }
         ... on ressurser_pdfRessurs_Entry {
           __typename
@@ -71,6 +60,22 @@ export default {
           pdf {
             url
           }
+          resourcesCategory {
+            id
+            title
+          }
+        }
+      }
+    }`,
+    categories: gql`
+    query {
+      categories(group: "ressurser") {
+        ... on ressurser_Category {
+          id
+          title
+          ingress
+          slug
+          color
         }
       }
     }`

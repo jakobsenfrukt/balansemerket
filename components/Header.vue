@@ -34,10 +34,6 @@ export default {
       open: false,
       page: [
         {
-          title: "Hjem",
-          slug: "/#"
-        },
-        {
           title: "Tiltak",
           slug: "/tiltak"
         },
@@ -56,7 +52,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/css/variables.scss';
 .site-header {
   width: 100%;
   padding: 2rem;
@@ -84,6 +79,8 @@ export default {
     margin: 0 .8rem;
     position: relative;
     font-size: .8rem;
+    letter-spacing: .06em;
+    text-transform: uppercase;
     &:nth-of-type(5) {
       margin-right: 0;
     }
@@ -91,6 +88,7 @@ export default {
       background: var(--color-green);
       padding: .2rem .8rem;
       border-radius: 2rem;
+      margin-right: 0;
       &.kort {
         background: var(--color-pink);
       }
@@ -120,29 +118,11 @@ export default {
   top: 2rem;
   right: 2rem;
   font-size: 2rem;
-
-  /*width: 2rem;
-  height: 3px;
-  background: $color-black;
-  position: relative;
-  &:before, &:after {
-    content: " ";
-    display: block;
-    width: 2rem;
-    height: 3px;
-    background: $color-black;
-    position: absolute;
-    top: -8px;
-  }
-  &:after {
-    top: auto;
-    bottom: -8px;
-  }*/
   
   display: none;
 }
 
-@media (max-width: $media-s) {
+@media (max-width: 900px) {
   .site-header {
     display: block;
   }
@@ -153,11 +133,11 @@ export default {
     a {
       font-size: 1.4rem;
       display: block;
-      margin: 1rem 0;
+      margin: 1rem 0 1.4rem;
       &.featured {
         display: block;
         width: max-content;
-        background: #76C2AF;
+        background: var(--color-green);
         padding: .4rem 1.2rem;
         margin: 1rem 0 1rem auto;
         border-radius: 2rem;

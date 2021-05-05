@@ -93,6 +93,11 @@ export default {
               slug
             }
           }
+          categories: categories(group: "ressurser") {
+            ... on ressurser_Category {
+              slug
+            }
+          }
         }`
       }
       // For single execution operations, a Promise can be use
@@ -101,7 +106,8 @@ export default {
         var tiltakArray = result.data.tiltak.map(tiltak => `/tiltak/${tiltak.slug}/`)
         var ressursArray = result.data.ressurser.map(ressurser => `/ressurser/${ressurser.slug}/`)
         var wordArray = result.data.dictionary.map(dictionary => `/ordliste/${dictionary.slug}/`)
-        return tiltakArray.concat(ressursArray, wordArray)
+        var categoriesArray = result.data.categories.map(categories => `/ordliste/${categories.slug}/`)
+        return tiltakArray.concat(ressursArray, wordArray, categoriesArray)
       })
       .catch(error => console.log(`received error ${error}`))
     }

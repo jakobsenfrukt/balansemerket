@@ -17,7 +17,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/css/variables.scss';
 .site-header {
   position: absolute;
   z-index: 1000;
@@ -42,7 +41,7 @@ export default {
   }
 }
 
-@media (max-width: $media-s) {
+@media (max-width: 700px) {
   .site-header {
     display: block;
     padding: 1rem;

@@ -36,15 +36,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/css/variables.scss';
 svg {
   width: 6rem;
 
   .background {
-    fill: #000;
+    fill: var(--color-black);
   }
   .text {
-    fill: #fff;
+    fill: var(--color-white);
   }
 
   &.invert {
@@ -52,7 +51,7 @@ svg {
       fill: var(--color-yellow);
     }
     .text {
-      fill: #000;
+      fill: var(--color-black);
     }
   }
 }

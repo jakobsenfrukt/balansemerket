@@ -1,6 +1,9 @@
 <template>
-  <nav class="tiltak-nav">
+  <nav class="tiltak-nav" :class="{index: index}">
     <ol>
+      <li>
+        <a href="/tiltak"><strong>Tiltak</strong></a>
+      </li>
       <li v-for="(tiltak, index) in tiltak" :key="index">
         <a :href="`/tiltak/${tiltak.slug}`">{{ tiltak.title }}</a>
       </li>
@@ -15,6 +18,12 @@ import Wave from '~/components/atoms/Wave.vue'
 export default {
   components: {
     Wave
+  },
+  props: {
+    index: {
+      type: Boolean,
+      default: false
+    }
   },
   apollo: {
     tiltak: gql`
@@ -31,15 +40,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/css/variables.scss';
 .tiltak-nav {
   font-size: .8rem;
   letter-spacing: .06em;
   text-transform: uppercase;
   ol {
+    list-style: none;
     max-width: 32rem;
     margin: 0 auto 2rem;
-    padding: 0 0 0 1rem;
+    padding: 0;
   }
   li {
     margin: 0 0 1rem;
@@ -54,7 +63,12 @@ export default {
   top: 0;
   left: 0;
 
-  @media (max-width: $media-m) {
+  &.index {
+    position: static;
+    margin-bottom: 3rem;
+  }
+
+  @media (max-width: 900px) {
     position: static;
     margin: 3rem auto;
   }

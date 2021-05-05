@@ -81,7 +81,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/css/variables.scss';
 .tiltak-arrows {
   padding-top: 7rem;
   display: flex;
@@ -93,8 +92,8 @@ export default {
     font-size: 3rem;
     transition: all .2s ease-in-out;
     &:hover {
-      color: $color-red;
-      border-color: $color-red;
+      color: var(--color-pink);
+      border-color: var(--color-pink);
     }
   }
   .next {
@@ -104,7 +103,7 @@ export default {
     text-align: left;
   }
 
-  @media (max-width: $media-s) {
+  @media (max-width: 700px) {
     flex-wrap: wrap;
     a {
       font-size: 2rem;

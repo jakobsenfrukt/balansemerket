@@ -35,7 +35,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/css/variables.scss';
 .dictionary-nav {
   font-size: .8rem;
   letter-spacing: .06em;
@@ -46,6 +45,7 @@ export default {
   ul {
     margin: 0 0 2rem;
     padding: 0 0 0 1rem;
+    list-style: none;
   }
   li {
     margin: 0 0 1rem;
@@ -66,6 +66,10 @@ export default {
     margin: 3rem 0 0;
     order: 2;
     max-width: none;
+
+    ul {
+      padding: 0;
+    }
   }
 }
 </style>
