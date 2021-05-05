@@ -79,6 +79,8 @@ export default {
     margin: 0 .8rem;
     position: relative;
     font-size: .8rem;
+    letter-spacing: .06em;
+    text-transform: uppercase;
     &:nth-of-type(5) {
       margin-right: 0;
     }
@@ -86,6 +88,7 @@ export default {
       background: var(--color-green);
       padding: .2rem .8rem;
       border-radius: 2rem;
+      margin-right: 0;
       &.kort {
         background: var(--color-pink);
       }
@@ -119,7 +122,7 @@ export default {
   display: none;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 900px) {
   .site-header {
     display: block;
   }
@@ -130,7 +133,7 @@ export default {
     a {
       font-size: 1.4rem;
       display: block;
-      margin: 1rem 0;
+      margin: 1rem 0 1.4rem;
       &.featured {
         display: block;
         width: max-content;

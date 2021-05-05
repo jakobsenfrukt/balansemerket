@@ -1,5 +1,5 @@
 <template>
-  <nav class="tiltak-nav">
+  <nav class="tiltak-nav" :class="{index: index}">
     <ol>
       <li>
         <a href="/tiltak"><strong>Tiltak</strong></a>
@@ -18,6 +18,12 @@ import Wave from '~/components/atoms/Wave.vue'
 export default {
   components: {
     Wave
+  },
+  props: {
+    index: {
+      type: Boolean,
+      default: false
+    }
   },
   apollo: {
     tiltak: gql`
@@ -57,7 +63,12 @@ export default {
   top: 0;
   left: 0;
 
-  @media (max-width: 1000px) {
+  &.index {
+    position: static;
+    margin-bottom: 3rem;
+  }
+
+  @media (max-width: 900px) {
     position: static;
     margin: 3rem auto;
   }

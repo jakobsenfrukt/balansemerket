@@ -131,6 +131,13 @@ export default {
 .category-header {
   max-width: 40em;
   margin: 0 auto;
+
+  a {
+    font-size: .8rem;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
 }
 .category-title {
   font-size: 3rem;

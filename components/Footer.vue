@@ -99,7 +99,7 @@ export default {
 }
 @media (max-width: 800px) {
   .site-footer {
-    padding-bottom: 5rem;
+    padding-bottom: 1rem;
   }
   .columns {
     grid-template-columns: 1fr;
@@ -110,6 +110,14 @@ export default {
         margin-left: 0;
       }
     }
+  }
+  .footnote {
+    float: none;
+  }
+  .to-top {
+    padding: 2rem 0;
+    float: none;
+    text-align: right;
   }
 }
 .bklogo {

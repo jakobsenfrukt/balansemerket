@@ -49,7 +49,7 @@ export default {
 
 <style lang="scss" scoped>
 .site-title {
-  margin-left: 300px;
+  margin-left: 25%;
   span {
     display: block;
     font-size: .8rem;
@@ -61,7 +61,7 @@ export default {
 }
 .page.ordliste {
   display: grid;
-  grid-template-columns: 300px 1fr;
+  grid-template-columns: 25% 1fr;
 
   .content {
     order: 2;
