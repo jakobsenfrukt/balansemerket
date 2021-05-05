@@ -61,9 +61,20 @@ export default {
       text-transform: uppercase;
       font-size: 1.4rem;
       letter-spacing: 1px;
-      text-decoration: underline;
+      padding-right: 2rem;
+      position: relative;
       a {
         text-decoration: none;
+      }
+      &:after {
+        content: "→";
+        font-weight: 900;
+        position: absolute;
+        top: 0;
+        right: 0;
+        opacity: 0;
+        transform: translateX(-2rem);
+        transition: all .2s ease-in-out;
       }
     }
     &.quiz {
@@ -96,6 +107,13 @@ export default {
     transition: all .2s ease-in-out;
     &:hover {
       transform: translateY(-4px);
+
+      .category-title {
+        &:after {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
     }
   }
 }

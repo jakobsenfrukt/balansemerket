@@ -207,7 +207,6 @@ export default {
       margin: 0 0 .8rem;
       font-size: 1.6rem;
       line-height: 1.2;
-      text-decoration: underline;
       &.pdf-title {
         padding-right: 3rem;
       }
