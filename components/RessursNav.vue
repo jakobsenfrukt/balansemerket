@@ -2,7 +2,7 @@
   <nav class="ressurs-nav">
     <ol>
       <li>
-        <a href="/ressurs"><strong>Ressurser</strong></a>
+        <a href="/ressurser"><strong>Ressurser</strong></a>
       </li>
       <li><a href="https://kurs.balansemerket.no">Nettkurs</a></li>
       <li><a href="/samtalekort">Samtalekort</a></li>
