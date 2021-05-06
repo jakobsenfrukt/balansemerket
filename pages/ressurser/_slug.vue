@@ -2,7 +2,7 @@
   <main class="site-main">
     <h1>{{ ressurser.title }}</h1>
     <section class="page ressurs-page">
-      <ContentBlocks v-if="ressurser.innhold.length" :content="ressurser.innhold" />
+      <ContentBlocks v-if="ressurser.innhold && ressurser.innhold.length" :content="ressurser.innhold" />
     </section>
   </main>
 </template>

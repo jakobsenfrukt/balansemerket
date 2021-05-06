@@ -88,13 +88,13 @@ export default {
               slug
             }
           }
-          dictionary: entries(section: "dictionary" ) {
-            ... on dictionary_word_Entry {
+          resourceCategories: categories(group: "ressurser") {
+            ... on ressurser_Category {
               slug
             }
           }
-          categories: categories(group: "ressurser") {
-            ... on ressurser_Category {
+          dictionary: entries(section: "dictionary" ) {
+            ... on dictionary_word_Entry {
               slug
             }
           }
@@ -105,9 +105,9 @@ export default {
       .then(result => { 
         var tiltakArray = result.data.tiltak.map(tiltak => `/tiltak/${tiltak.slug}/`)
         var ressursArray = result.data.ressurser.map(ressurser => `/ressurser/${ressurser.slug}/`)
+        var resourceCategories = result.data.resourceCategories.map(category => `/ressurser/kategori/${category.slug}/`)
         var wordArray = result.data.dictionary.map(dictionary => `/ordliste/${dictionary.slug}/`)
-        var categoriesArray = result.data.categories.map(categories => `/ordliste/${categories.slug}/`)
-        return tiltakArray.concat(ressursArray, wordArray, categoriesArray)
+        return tiltakArray.concat(ressursArray, wordArray, resourceCategories)
       })
       .catch(error => console.log(`received error ${error}`))
     }
