@@ -13,7 +13,11 @@
       <div class="intro" v-if="cardNumber === -1">
         <div class="intro-content">
           <div class="content" v-html="cardIndex.introText"></div>
-          <button class="button" @click="cardNumber++">Trekk et kort</button>
+          <div v-if="!cardStack.length">
+            <button class="button" @click="toggleModal('customize')">Velg kort</button>
+            <span class="empty-message">Ingen kort valgt</span>
+          </div>
+          <button class="button" @click="cardNumber++" v-else-if="cardNumber === -1">Trekk et kort</button>
         </div>
       </div>
       <div class="card-wrapper" v-if="currentCard">
@@ -56,14 +60,16 @@
           <button v-for="category in allCategories" :key="category.id" @click="() => { toggleCategory(category) }">
             <FilterOption :option="category" class="category-option" :checked="isCategorySelected(category)" />
           </button>
+          <div v-if="!getSelectedCategories().length" class="empty-message">Du må velge minst ett tema</div>
         </div>
         <div class="customize-options customize-type">
           <h3>Vis kort etter type</h3>
           <button v-for="type in cardTypes" :key="type.id" @click="() => { toggleType(type) }">
             <FilterOption :option="type" class="type-option" :checked="isTypeSelected(type)" />
           </button>
+          <div v-if="!getSelectedTypes().length" class="empty-message">Du må velge minst én type</div>
         </div>
-        <div class="cards" id="customize-cards">
+        <div class="cards" id="customize-cards" v-if="getSelectedCategories().length && getSelectedTypes().length">
           <button @click="toggle('customize-cards')">
             <h3 class="readmore">Velg hvilke enkeltkort som skal vises</h3>
           </button>
@@ -71,10 +77,11 @@
             <div class="card-list-category" v-for="(item, index) in selectableCardsByCategory()" :key="`category-card-list-${index}`">
               <div class="card-list-header">
                 <h4>{{item.category.title}}</h4>
-                <div class="card-list-select">
+                <div class="card-list-select" v-if="item.cards.length">
                   <button class="button-textonly" @click="selectAll(item.category); $forceUpdate();">Velg alle</button>
                   <button class="button-textonly" @click="deSelectAll(item.category); $forceUpdate();">Fjern markeringer</button>
                 </div>
+                <div v-else class="empty-message">Temaet inneholder ingen kort av typen <span v-for="(type, index) in getSelectedTypes()" :key="index" class="empty-message__type">{{ type.title }}</span></div>
               </div>
               <div class="card-list">
                 <button class="card-list-wrapper" v-for="card in item.cards" :key="card.id" @click="() => { toggleCard(card) }">
@@ -743,6 +750,29 @@ export default {
   &.visible {
     display: block;
     opacity: 1;
+  }
+}
+.empty-message {
+  font-style: italic;
+  font-size: .8rem;
+  display: inline-block;
+  &:before {
+    content: "!";
+    display: inline-block;
+    background: var(--color-brightred);
+    width: 1.2rem;
+    height: 1.2rem;
+    line-height: 1.2rem;
+    margin-right: .3rem;
+    text-align: center;
+    border-radius: 50px;
+    text-shadow: none;
+    font-style: normal;
+    color: var(--color-white);
+    font-weight: 700;
+  }
+  &__type {
+    text-transform: lowercase;
   }
 }
 @media (min-width: 800px) {
