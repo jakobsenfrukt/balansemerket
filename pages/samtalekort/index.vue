@@ -759,7 +759,7 @@ export default {
   &:before {
     content: "!";
     display: inline-block;
-    background: var(--color-brightred);
+    background: var(--color-pink);
     width: 1.2rem;
     height: 1.2rem;
     line-height: 1.2rem;
