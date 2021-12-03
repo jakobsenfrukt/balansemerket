@@ -1,5 +1,5 @@
 html {
-	font-size: calc(14px + 6 * ((100vw - 320px) / 1200));
+  font-size: calc(14px + 6 * ((100vw - 320px) / 1200));
   height: 100%;
   background: var(--color-background);
 }
@@ -41,12 +41,25 @@ a {
   }
 }
 
-h1, h2, h3, h4, h5, h6, p, ul, ol {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul,
+ol {
   max-width: var(--width-s);
   margin: auto;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: 900;
   font-size: 1rem;
   line-height: 1.1;
@@ -114,17 +127,24 @@ img.main-illustration {
 .page {
   a {
     color: inherit;
-    text-decoration: none;
     display: inline-block;
-    border-bottom: 2px solid var(--color-text);
-    line-height: 1;
-    transition: all .2s ease-in-out;
+    text-decoration-color: var(--color-text);
+    text-underline-offset: 2px;
+    text-decoration-thickness: 2px;
+    transition: all 0.2s ease-in-out;
     &:hover {
       color: var(--color-pink);
-      border-color: var(--color-pink);
+      text-decoration-color: var(--color-pink);
+    }
+    &.button {
+      max-width: none;
+      width: auto;
+      color: #000;
+      background: var(--color-green);
     }
   }
-  ul, ol {
+  ul,
+  ol {
     max-width: var(--width-s);
     margin: 0 auto 2rem;
     padding-left: 2rem;
@@ -140,7 +160,9 @@ img.main-illustration {
 
   .text {
     margin: 2rem auto;
-    h2, h3, h4 {
+    h2,
+    h3,
+    h4 {
       margin-top: 3rem;
     }
   }
@@ -163,21 +185,26 @@ img.main-illustration {
           height: 1em;
           display: block;
           position: absolute;
-          top: -.15em;
+          top: -0.15em;
           left: -1.5em;
         }
       }
     }
   }
+  iframe {
+    display: block;
+    margin: 0 auto;
+  }
 }
 .content {
-  ul, ol {
+  ul,
+  ol {
     max-width: var(--width-s);
     margin: 0 auto 2rem;
     padding-left: 2rem;
 
     li {
-      margin-bottom: .6rem;
+      margin-bottom: 0.6rem;
 
       ul {
         margin-top: 1rem;
@@ -237,7 +264,7 @@ button {
   cursor: pointer;
   border: none;
   border-radius: 2rem;
-  transition: all .2s ease;
+  transition: all 0.2s ease;
   + .button {
     margin-top: 0;
   }
@@ -259,13 +286,15 @@ button {
   &.disabled {
     background: #666;
     color: #ddd;
-    opacity: .96;
+    opacity: 0.96;
     cursor: default;
     &:hover {
       transform: none;
     }
   }
-  &-close, &-info, &-question {
+  &-close,
+  &-info,
+  &-question {
     width: 3rem;
     height: 3rem;
     padding: 0;
@@ -275,19 +304,19 @@ button {
     right: 1rem;
   }
   &-close {
-    background-image: url('/graphics/close.svg');
+    background-image: url("/graphics/close.svg");
     background-size: 36%;
     background-position: center;
     background-repeat: no-repeat;
   }
   &-info {
-    background-image: url('/graphics/info.svg');
+    background-image: url("/graphics/info.svg");
     background-size: 36%;
     background-position: center;
     background-repeat: no-repeat;
   }
   &-question {
-    background-image: url('/graphics/question.svg');
+    background-image: url("/graphics/question.svg");
     background-size: 36%;
     background-position: center;
     background-repeat: no-repeat;
@@ -303,16 +332,23 @@ button {
   }
 }
 
-
 .card p {
   margin: 0 auto;
   max-width: none;
   word-wrap: break-word;
 }
 
-
-.page.ordliste, .page.index {
-  p, ul, ol, h1, h2, h3, h4, h5, h6 {
+.page.ordliste,
+.page.index {
+  p,
+  ul,
+  ol,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     margin-left: 0;
   }
 }

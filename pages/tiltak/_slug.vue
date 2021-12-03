@@ -3,8 +3,8 @@
     <h1>{{ tiltak.title }}</h1>
     <section class="page tiltak-page">
       <p v-if="tiltak.ingress">{{ tiltak.ingress }}</p>
-      <img v-if="tiltak.toppbilde.length" class="main-illustration" :src="tiltak.toppbilde[0].fullWidth" :alt="tiltak.toppbilde[0].title" />
-      <ContentBlocks v-if="tiltak.innhold.length" :content="tiltak.innhold" />
+      <img v-if="tiltak.toppbilde && tiltak.toppbilde.length" class="main-illustration" :src="tiltak.toppbilde[0].fullWidth" :alt="tiltak.toppbilde[0].title" />
+      <ContentBlocks v-if="tiltak.innhold && tiltak.innhold.length" :content="tiltak.innhold" />
       <TiltakArrows :current="tiltak.slug" />
       <TiltakNav />
     </section>
@@ -50,7 +50,7 @@ export default {
       },
       query: gql`
       query Tiltak($slug: String!) {
-        tiltak: entry(slug: [$slug]) {
+        tiltak: entry(section: "tiltak", slug: [$slug]) {
           ... on tiltak_tiltak_Entry {
             title
             ingress

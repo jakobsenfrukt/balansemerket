@@ -35,7 +35,7 @@ export default {
       },
       query: gql`
       query ressurser($slug: String!) {
-        ressurser: entry(slug: [$slug]) {
+        ressurser: entry(section: "ressurser", slug: [$slug]) {
           ... on ressurser_ressurser_Entry {
             title
             ingress

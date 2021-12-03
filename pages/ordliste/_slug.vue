@@ -38,7 +38,7 @@ export default {
       },
       query: gql`
       query Dictionary($slug: String!) {
-        word: entry(slug: [$slug]) {
+        word: entry(section: "dictionary", slug: [$slug]) {
           ... on dictionary_word_Entry {
             title
             ingress
