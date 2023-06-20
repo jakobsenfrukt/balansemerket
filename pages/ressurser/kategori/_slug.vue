@@ -237,14 +237,27 @@ export default {
   font-size: .8rem;
   font-weight: 500;
 }
-@media (max-width: 1100px) {
+@media (max-width: 1500px) {
   .resource-list {
     grid-template-columns: 1fr 1fr;
+    .resource {
+      min-width: 0;
+      &-text {
+        overflow-wrap: break-word;
+      }
+    }
   }
 }
 @media (max-width: 700px) {
   .resource-list {
     grid-template-columns: 1fr;
+
+    .resource {
+      min-width: 0;
+      &-text {
+        overflow-wrap: break-word;
+      }
+    }
   }
 }
 </style>
