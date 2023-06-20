@@ -1,7 +1,7 @@
 <template>  
 <svg :class="{ invert: invert }" viewBox="0 0 238 138" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <g id="BKLogo" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="BKLogo" transform="translate(-279.000000, -185.000000)">
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g transform="translate(-279.000000, -185.000000)">
             <g id="Balansekunst_logo_sorthvit" transform="translate(279.000000, 185.000000)">
                 <polygon id="Fill-1" class="background" points="0.0978794702 0 0.0978794702 100.290358 110.781648 101.078146 110.781648 137.69247 237.34227 137.69247 237.34227 38.5979603 123.14727 38.5979603 123.14727 0"></polygon>
                 <g id="Group-26" transform="translate(12.794702, 11.013954)" class="text">
