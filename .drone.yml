@@ -47,6 +47,7 @@ steps:
         - banana.444.no
       source: ./dist/
       target: ~/www/balansemerket.no/public/
+      args: "--delete-after -v"
       secrets: ["balanse_ssh_key"]
 
 volumes:
