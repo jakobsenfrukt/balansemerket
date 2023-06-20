@@ -2,7 +2,7 @@
   <footer class="site-footer">
     <div class="columns">
       <div v-for="(block, index) in footer.tekstkolonner" :key="index" class="column">
-        <h3 v-if="block.overskrift">{{ block.overskrift }}</h3>
+        <h1 v-if="block.overskrift">{{ block.overskrift }}</h1>
         <div v-html="block.tekst"></div>
       </div>
     </div>
@@ -59,11 +59,11 @@ export default {
   .column {
     padding-right: 3rem;
 
-    h3, p {
+    h1, p {
       margin: 0 0 .5rem;
     }
 
-    h3 {
+    h1 {
       font-weight: normal;
       font-size: 1em;
       text-transform: uppercase;
