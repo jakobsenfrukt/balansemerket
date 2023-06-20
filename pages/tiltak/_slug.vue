@@ -27,7 +27,7 @@ export default {
   },
   head () {
     return {
-      title: 'Tiltak: ' + this.tiltak.title,
+      title: this.tiltak.title + " | Tiltak",
       meta: [
         // hid is used as unique identifier. Do not use `vmid` for it as it will not work
         { 
